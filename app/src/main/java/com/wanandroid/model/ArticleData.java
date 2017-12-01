@@ -5,9 +5,8 @@ import com.wanandroid.model.entity.Article;
 import java.util.List;
 
 /**
- * Created by ${jay} on ${2016/8/17
+ * WanAndroid文章数据
  */
-
 public class ArticleData {
     /**
      * errorCode : 0
@@ -26,7 +25,7 @@ public class ArticleData {
         this.errorCode = errorCode;
     }
 
-    public Object getErrorMsg() {
+    public String getErrorMsg() {
         return errorMsg;
     }
 
@@ -52,7 +51,6 @@ public class ArticleData {
          * curPage : 2
          * over : false
          */
-
         private int offset;
         private int size;
         private int total;

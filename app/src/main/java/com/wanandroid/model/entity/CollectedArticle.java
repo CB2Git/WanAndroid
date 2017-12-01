@@ -1,41 +1,45 @@
 package com.wanandroid.model.entity;
 
 /**
- * 首页文章信息
+ * 收藏的文章信息
  */
-public class Article {
+public class CollectedArticle {
+
     /**
-     * id : 1541
-     * title :  Android开发中dip，dpi，density，px等详解
-     * chapterId : 198
-     * chapterName : 基础概念
+     * id : 783
+     * originId : 1494
+     * title : 我的 Android 面试故事 | 13家面试记录
+     * chapterId : 73
+     * chapterName : 面试相关
      * envelopePic : null
-     * link : http://www.jianshu.com/p/cd66b7e01d4a
-     * author : 希灵丶
+     * link : https://mp.weixin.qq.com/s/N_3jUA1C-W1B-X6DQSXVTQ
+     * author : 剑西
      * origin : null
-     * publishTime : 1511766156000
-     * zan : null
+     * publishTime : 1512020515000
+     * zan : 0
      * desc : null
      * visible : 0
-     * niceDate : 1天前
+     * niceDate : 18分钟前
      * courseId : 13
-     * collect : false
+     * userId : 883
      */
+
     private int id;
+    private int originId;
     private String title;
     private int chapterId;
     private String chapterName;
-    private Object envelopePic;
+    private String envelopePic;
     private String link;
     private String author;
     private Object origin;
     private long publishTime;
     private int zan;
-    private String desc;
+    private Object desc;
     private int visible;
     private String niceDate;
     private int courseId;
-    private boolean collect;
+    private int userId;
 
     public int getId() {
         return id;
@@ -43,6 +47,14 @@ public class Article {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getOriginId() {
+        return originId;
+    }
+
+    public void setOriginId(int originId) {
+        this.originId = originId;
     }
 
     public String getTitle() {
@@ -69,11 +81,11 @@ public class Article {
         this.chapterName = chapterName;
     }
 
-    public Object getEnvelopePic() {
+    public String getEnvelopePic() {
         return envelopePic;
     }
 
-    public void setEnvelopePic(Object envelopePic) {
+    public void setEnvelopePic(String envelopePic) {
         this.envelopePic = envelopePic;
     }
 
@@ -117,11 +129,11 @@ public class Article {
         this.zan = zan;
     }
 
-    public String getDesc() {
+    public Object getDesc() {
         return desc;
     }
 
-    public void setDesc(String desc) {
+    public void setDesc(Object desc) {
         this.desc = desc;
     }
 
@@ -149,11 +161,11 @@ public class Article {
         this.courseId = courseId;
     }
 
-    public boolean isCollect() {
-        return collect;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setCollect(boolean collect) {
-        this.collect = collect;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }
