@@ -10,7 +10,7 @@ public class WanAndroidUser {
     /**
      * id : 880
      * username : test~11111
-     * password : 1234567890
+     * password : 123****890
      * icon : null
      * type : 0
      * collectIds : []

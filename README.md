@@ -2,7 +2,7 @@
 
 > 一个对应www.wanandroid.com的App
 
-+ 整体架构使用 MVP+RxJava+Retrofit2.0 
++ 整体架构使用 MVP+RxJava2+Retrofit2.0
 
 ##### 2017/12/1 星期五 17:47:27 
 
@@ -13,3 +13,8 @@
  2. 收藏、取消收藏、搜索文章用户操作相关接口 
 
  3. 首页数据获取、"大家都在搜"、文章分类获取、分类文章获取等浏览相关接口
+ 
+> 参考
+
+ 1. [https://github.com/googlesamples/android-architecture](https://github.com/googlesamples/android-architecture "Google MVP Demo")
+
