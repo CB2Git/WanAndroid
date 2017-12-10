@@ -1,4 +1,4 @@
-package com.wanandroid.utils;
+package com.wanandroid.widget;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -54,4 +54,6 @@ public class NestedScaleBehavior extends CoordinatorLayout.Behavior<View> {
             }
         }
     }
+
+    //TODO　对于惯性滑动也需要处理哦
 }

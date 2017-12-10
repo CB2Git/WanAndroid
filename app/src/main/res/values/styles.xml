@@ -9,9 +9,7 @@
     </style>
 
     <style name="toolbar_popup_theme" parent="@style/ThemeOverlay.AppCompat.Light">
-        <item name="overlapAnchor">true</item>
-        <item name="android:dropDownHorizontalOffset">-4dip</item>
+        <item name="overlapAnchor">false</item>
     </style>
-
 
 </resources>

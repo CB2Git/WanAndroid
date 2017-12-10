@@ -23,3 +23,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#com.wang.avi:library:2.1.3
+-keep class com.wang.avi.** { *; }
+-keep class com.wang.avi.indicators.** { *; }

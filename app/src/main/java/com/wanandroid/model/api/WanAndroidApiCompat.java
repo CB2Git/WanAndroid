@@ -24,24 +24,30 @@ import io.reactivex.functions.Function;
  */
 public class WanAndroidApiCompat {
 
+    private static final String TAG = "WanAndroidApiCompat";
+
     /**
+     * NOTE：此接口官方有提供，此兼容版本被弃用,可以查看{@link WanAndroidApi#searchArticle(int, String)}
+     * <p>
      * 搜索文章接口
      * <p>
      * 接口地址:www.wanandroid.com/article/query
-     * 请求参数:k=?，多个关键词提交时使用+号连接
+     * 请求参数:k=?
      * 请求方式:GET
      * </p>
      * 注意:返回的文章数据部分关键数据有效，其他数据很多为null
      */
+    @Deprecated
     public static Observable<SearchData> searchArticle(final String key) {
         return Observable.fromCallable(new Callable<SearchData>() {
             @Override
             public SearchData call() throws Exception {
                 Element body = Jsoup.connect("http://www.wanandroid.com/article/query")
-                        .data("k", key.replaceAll(" +", "+"))
+                        .data("k", key.replaceAll(" +", " "))
                         .get()
                         .body();
                 Elements select = body.select("ul.list_article.listArticle > li > div");
+                System.out.print("call: " + select);
                 SearchData searchData = new SearchData();
                 List<Article> articles = new ArrayList<>();
                 for (int i = 0; i < select.size(); i++) {
@@ -92,7 +98,7 @@ public class WanAndroidApiCompat {
                         .get()
                         .body();
                 Elements select = body.select("ul.link_list.search_list > li > a");
-
+                System.out.print("call: " + select);
                 List<String> hotKeys = new ArrayList<>();
                 for (int i = 0; i < select.size(); i++) {
                     Element element = select.get(i);
@@ -126,6 +132,7 @@ public class WanAndroidApiCompat {
                         .get()
                         .body();
                 Elements select = body.select("div.sort_info:not(.last) > div.list_sort > ul > li > a");
+                System.out.print("call: " + select);
                 List<Cid> cids = new ArrayList<>();
                 for (int i = 0; i < select.size(); i++) {
                     Element element = select.get(i);
@@ -165,6 +172,7 @@ public class WanAndroidApiCompat {
                         .get()
                         .body();
                 Elements select = body.select("div.sort_info.last > div.list_sort > ul > li > a");
+                System.out.print("call: " + select);
                 List<Cid> cids = new ArrayList<>();
                 for (int i = 0; i < select.size(); i++) {
                     Element element = select.get(i);

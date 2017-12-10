@@ -2,8 +2,8 @@ package com.wanandroid.model.api;
 
 import com.wanandroid.model.ArticleData;
 import com.wanandroid.model.AuthData;
-import com.wanandroid.model.CollectedArticleData;
 import com.wanandroid.model.BaseResponseData;
+import com.wanandroid.model.CollectedArticleData;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
@@ -51,4 +51,9 @@ public interface WanAndroidApi {
     //获取分类数据
     @GET("article/list/{page}/json")
     Observable<ArticleData> getCidData(@Path("page") int page, @Query("cid") int cid);
+
+    //搜索接口
+    @POST("article/query/{page}/json")
+    @FormUrlEncoded
+    Observable<ArticleData> searchArticle(@Path("page") int page, @Field("k") String key);
 }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/search_hot_key_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/hot_search_hint"
+            android:textColor="@color/black_gray"
+            android:textSize="@dimen/text_size_m"/>
+
+        <com.zhy.view.flowlayout.TagFlowLayout
+            android:id="@+id/search_hot_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            app:max_select="1"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/search_error"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/search_error_margin_top"
+        android:text="@string/search_error"
+        android:textSize="@dimen/text_size_h"/>
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/search_avi_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/search_avi_progress_margin_top"
+        app:indicatorColor="@color/colorPrimary"
+        app:indicatorName="BallTrianglePathIndicator"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/search_article_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</FrameLayout>

@@ -2,6 +2,8 @@ package com.wanandroid.business.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +17,14 @@ import com.wanandroid.model.entity.Article;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * WanAndroid文章列表的适配器
  */
 public class WanAndroidArticleAdapter extends RefreshRecycleAdapter<WanAndroidArticleAdapter.ArticleHolder> {
+
+    private static final String TAG = "WanAndroidArticleAdapte";
 
     private Context mContext;
 
@@ -43,7 +48,16 @@ public class WanAndroidArticleAdapter extends RefreshRecycleAdapter<WanAndroidAr
     @Override
     protected void onBindNormalViewHolder(ArticleHolder holder, int position) {
         Article article = mArticles.get(position);
-        holder.articleTitle.setText(article.getTitle());
+        //这里可能有html,比如搜索接口的数据
+        //eg: 用MediaPlayer+Texture<em class='highlight'>View</em>封装一个完美实现全屏、小窗口的视频播放器
+        boolean matches = Pattern.matches(".*<em.+?>(.+?)</em>.*", article.getTitle());
+        Log.i(TAG, "onBindNormalViewHolder: Is Html Format:" + matches);
+        if (matches) {
+            String newArticleTitle = article.getTitle().replaceAll("<em.+?>", "<font color=\"#f0717e\">").replaceAll("</em>", "</font>");
+            holder.articleTitle.setText(Html.fromHtml(newArticleTitle));
+        } else {
+            holder.articleTitle.setText(article.getTitle());
+        }
         String detail_format = mContext.getString(R.string.article_detail_format);
         holder.articleDetail.setText(String.format(detail_format, article.getNiceDate(), article.getAuthor()));
     }
@@ -58,16 +72,19 @@ public class WanAndroidArticleAdapter extends RefreshRecycleAdapter<WanAndroidAr
     @Override
     protected void onBindRefreshFooterViewHolder(ArticleHolder holder, RefreshState state) {
         if (state == RefreshState.LOADING) {
-            TextView tv = (TextView) holder.loadMoreView.findViewById(R.id.tv_re);
+            TextView tv = (TextView) holder.loadMoreView.findViewById(R.id.load_more_text);
             tv.setText(R.string.loading);
+            holder.loadMoreView.findViewById(R.id.load_more_progress).setVisibility(View.VISIBLE);
         }
         if (state == RefreshState.NO_MORE) {
-            TextView tv = (TextView) holder.loadMoreView.findViewById(R.id.tv_re);
-            tv.setText("没有更多了");
+            TextView tv = (TextView) holder.loadMoreView.findViewById(R.id.load_more_text);
+            tv.setText(R.string.no_more);
+            holder.loadMoreView.findViewById(R.id.load_more_progress).setVisibility(View.GONE);
         }
         if (state == RefreshState.LOADING_ERROR) {
-            TextView tv = (TextView) holder.loadMoreView.findViewById(R.id.tv_re);
-            tv.setText("加载失败了");
+            TextView tv = (TextView) holder.loadMoreView.findViewById(R.id.load_more_text);
+            tv.setText(R.string.load_more_error);
+            holder.loadMoreView.findViewById(R.id.load_more_progress).setVisibility(View.GONE);
         }
     }
 

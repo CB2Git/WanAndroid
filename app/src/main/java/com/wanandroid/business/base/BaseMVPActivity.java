@@ -30,11 +30,11 @@ public abstract class BaseMVPActivity<V, P extends BasePresenterImpl<V>> extends
 
     public abstract V bindView();
 
-    protected P getPresenter() {
+    protected P getBindPresenter() {
         return mPresenter;
     }
 
-    protected V getView() {
+    protected V getBindView() {
         return mView;
     }
 

@@ -14,6 +14,8 @@ import com.wanandroid.model.entity.WanAndroidUser;
 import org.junit.Test;
 
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import io.reactivex.functions.Consumer;
 
@@ -196,7 +198,7 @@ public class WanAndroidApiTest {
      */
     @Test
     public void testSearchArticle() throws Exception {
-        WanAndroidApiCompat.searchArticle("android").subscribe(new Consumer<SearchData>() {
+        WanAndroidApiCompat.searchArticle("代码混淆 安全").subscribe(new Consumer<SearchData>() {
             @Override
             public void accept(SearchData articleData) throws Exception {
                 assertEquals(articleData.getErrorCode(), 0);
@@ -264,5 +266,20 @@ public class WanAndroidApiTest {
                 fail(throwable.getMessage());
             }
         });
+    }
+
+    /**
+     * 测试标题网页转码
+     */
+    @Test
+    public void testTitleFormat() throws Exception {
+        String target = "Android UI<em class='highlight'>三</em>实战<em class='highlight'>三</em>识别绘制<em class='highlight'>三</em>中的性能问题";
+        Pattern pattern = Pattern.compile("<em.+?>(.+?)</em>");
+        Matcher matcher = pattern.matcher(target);
+        target.replaceAll("<em.+?>","<font color=\"#f0717e\">");
+        while (matcher.find()) {
+            System.out.println(matcher.group(1));
+        }
+        System.out.println(target.replaceAll("<em.+?>","<font color=\"#f0717e\">").replaceAll("</em>","</font>"));
     }
 }

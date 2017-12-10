@@ -8,15 +8,15 @@
     android:orientation="horizontal">
 
     <ProgressBar
+        android:id="@+id/load_more_progress"
         style="?android:attr/progressBarStyle"
         android:layout_width="@dimen/article_load_more_progress_height"
         android:layout_height="@dimen/article_load_more_progress_height"/>
 
     <TextView
-        android:id="@+id/tv_re"
+        android:id="@+id/load_more_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="默认文字"
         android:textSize="@dimen/text_size_m"/>
 
 </LinearLayout>

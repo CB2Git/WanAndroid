@@ -9,45 +9,36 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/main_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/app_name"
-            app:titleTextColor="@android:color/white"/>
+            app:titleTextColor="@android:color/white">
+
+            <EditText
+                android:id="@+id/main_edit_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/edit_text_bg"
+                android:hint="@string/search_hint"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textCursorDrawable="@drawable/edit_text_cursor"
+                android:visibility="gone"/>
+        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/main_swipe_refresh_layout"
+    <FrameLayout
+        android:id="@+id/main_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/main_article_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/main_back_top"
-        android:layout_width="@dimen/float_action_bar_height"
-        android:layout_height="@dimen/float_action_bar_height"
-        android:layout_gravity="right|bottom"
-        android:layout_marginBottom="@dimen/float_action_bar_margin"
-        android:layout_marginRight="@dimen/float_action_bar_margin"
-        android:clickable="true"
-        android:scaleType="center"
-        android:scaleX="0.0"
-        android:scaleY="0.0"
-        app:backgroundTint="@color/colorPrimary"
-        app:elevation="4dp"
-        app:layout_behavior="com.wanandroid.utils.NestedScaleBehavior"
-        app:srcCompat="@mipmap/ic_back_to_top"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 </android.support.design.widget.CoordinatorLayout>

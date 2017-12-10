@@ -1,222 +1,197 @@
 package com.wanandroid.business.main;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wanandroid.R;
-import com.wanandroid.business.adapter.WanAndroidArticleAdapter;
-import com.wanandroid.business.base.BaseMVPActivity;
-import com.wanandroid.business.fun.OnArticleItemClickListener;
-import com.wanandroid.business.webview.WebActivity;
-import com.wanandroid.model.entity.Article;
-
-import java.util.List;
+import com.wanandroid.business.fun.OnSearchKeyClickListener;
+import com.wanandroid.business.search.SearchFragment;
+import com.wanandroid.utils.ImeUtils;
 
 /**
  * 应用主界面
  */
-public class MainActivity extends BaseMVPActivity<MainContract.View, MainPresenter> implements MainContract.View, SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends AppCompatActivity implements OnSearchKeyClickListener {
 
     private static final String TAG = "MainActivity";
 
-    //预加载的数量，当滚动到只剩下5个的时候开始加载下一页
-    private static final int PRELOAD_SIZE = 5;
-
     private Toolbar mToolbar;
 
-    private RecyclerView mRecyclerView;
+    private EditText mSearchEdit;
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    //显示首页数据的Fragment
+    private MainFragment mArticleFragment;
 
-    private FloatingActionButton mBackTopButton;
+    //显示搜索结果的Fragment
+    private SearchFragment mSearchFragment;
 
-    //布局管理器
-    private LinearLayoutManager mLayoutManager;
-
-    //首页列表适配器
-    private WanAndroidArticleAdapter mArticleAdapter = new WanAndroidArticleAdapter(this);
-
-    //当前正在加载第几页
-    private int mCurrPage = 0;
+    //是否进入了搜索状态，搜索状态需要隐藏菜单等
+    private boolean mInSearchMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initView();
-        loadData();
+        initView(savedInstanceState);
     }
 
-    @Override
-    public MainPresenter bindPresenter() {
-        return new MainPresenter();
-    }
 
-    @Override
-    public MainContract.View bindView() {
-        return this;
-    }
-
-    private void initView() {
+    private void initView(Bundle savedInstanceState) {
         //设置顶部标题栏
         mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolbar);
 
-        mLayoutManager = new LinearLayoutManager(this);
-        mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
+        //为EditText设置搜索监听
+        mSearchEdit = (EditText) findViewById(R.id.main_edit_search);
+        mSearchEdit.setOnEditorActionListener(getEditorAction());
 
-        //设置RecycleView
-        mRecyclerView = (RecyclerView) findViewById(R.id.main_article_list);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mArticleAdapter);
-        mRecyclerView.addOnScrollListener(getOnBottomListener());
-
-        mArticleAdapter.setOnArticleItemClickListener(getOnArticleItemClickListener());
-
-        //设置SwipeRefreshLayout
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.main_swipe_refresh_layout);
-        mSwipeRefreshLayout.setColorSchemeColors(Color.BLUE, Color.YELLOW, Color.RED, Color.GREEN);
-        //保证首次能显示刷新
-        mSwipeRefreshLayout.measure(0, 0);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-
-        mBackTopButton = (FloatingActionButton) findViewById(R.id.main_back_top);
-        mBackTopButton.setOnClickListener(getOnBackTopListener());
-    }
-
-    private void loadData() {
-        //TODO 做一个预加载
-        getPresenter().refreshArticles();
-    }
-
-
-    @Override
-    public void showLoading() {
-        if (mSwipeRefreshLayout != null) {
-            mSwipeRefreshLayout.setRefreshing(true);
-        }
-    }
-
-    @Override
-
-    public void hideLoading() {
-        if (mSwipeRefreshLayout != null) {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
-    }
-
-    @Override
-    public void hideLoadMore() {
-        mArticleAdapter.setRefreshing(false);
-    }
-
-    @Override
-    public void showErrorMsg(String errorMsg) {
-        //TODO Error提示
-        Log.i(TAG, "showErrorMsg: " + errorMsg);
-    }
-
-    @Override
-    public void displayArticles(List<Article> articles, boolean clearOld) {
-        if (clearOld) {
-            mArticleAdapter.setArticles(articles);
-            mCurrPage = 0;
+        //初始化Fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (savedInstanceState != null) {
+            mArticleFragment = (MainFragment) fragmentManager.findFragmentByTag(MainFragment.class.getName());
+            fragmentManager.beginTransaction()
+                    .show(mArticleFragment)
+                    .commit();
         } else {
-            mArticleAdapter.addArticles(articles);
+            mArticleFragment = new MainFragment();
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.add(R.id.main_fragment_container, mArticleFragment, MainFragment.class.getName());
+            transaction.commit();
         }
     }
 
     @Override
-    public void onRefresh() {
-        getPresenter().cancelCurrentLoadArticles();
-        getPresenter().refreshArticles();
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        //如果是搜索状态，则将菜单全部隐藏
+        for (int i = 0; i < menu.size(); i++) {
+            menu.getItem(i).setVisible(!mInSearchMode);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                changeSearchMode(true);
+                break;
+            case android.R.id.home:
+                changeSearchMode(false);
+                break;
+            case R.id.action_show_classify:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 当用户点搜索按钮的时候切换到搜索视图
+     */
+    private void changeSearchMode(boolean isSearch) {
+        mInSearchMode = isSearch;
+        mSearchEdit.setVisibility(isSearch ? View.VISIBLE : View.GONE);
+        mSearchEdit.setText("");
+        //刷新菜单
+        invalidateOptionsMenu();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (isSearch) {
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            mSearchFragment = new SearchFragment();
+            transaction
+                    .add(R.id.main_fragment_container, mSearchFragment, SearchFragment.class.getName())
+                    .hide(mArticleFragment)
+                    .addToBackStack(null)
+                    .commit();
+            //这里加点延迟才能打开键盘
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    ImeUtils.showIme(mSearchEdit);
+                }
+            }, 200);
+
+        } else {
+            Fragment fragmentByTag = fragmentManager.findFragmentByTag(SearchFragment.class.getName());
+            if (fragmentByTag != null) {
+                fragmentManager.popBackStack();
+                mSearchFragment = null;
+            }
+        }
     }
 
     @Override
     public void onBackPressed() {
-        if (mSwipeRefreshLayout != null && mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.setRefreshing(false);
-            getPresenter().cancelCurrentLoadArticles();
-            return;
+        boolean consumed = false;
+        if (mArticleFragment != null) {
+            consumed = mArticleFragment.onBackPressed();
         }
-        super.onBackPressed();
+        if (!consumed) {
+            //自己处理返回事件
+            if (mInSearchMode) {
+                changeSearchMode(false);
+                return;
+            }
+            super.onBackPressed();
+        }
     }
 
     /**
-     * 返回顶部按钮点击监听
+     * 用户点击了搜索按钮的响应
      */
-    @NonNull
-    private View.OnClickListener getOnBackTopListener() {
-        return new View.OnClickListener() {
+    public TextView.OnEditorActionListener getEditorAction() {
+        //返回True可以让键盘不收起
+        return new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View v) {
-                if (mRecyclerView != null) {
-                    mRecyclerView.smoothScrollToPosition(0);
-                    //因为smoothScrollToPosition不会触发behavior，所以这里手动隐藏
-                    ViewCompat.animate(mBackTopButton)
-                            .scaleX(0.0f)
-                            .scaleY(0.0f)
-                            .setDuration(500)
-                            .start();
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if (search(v.getText().toString())) return true;
                 }
+                return false;
             }
         };
     }
 
-    /**
-     * RecycleView下滑底部刷新
-     */
-    @NonNull
-    private RecyclerView.OnScrollListener getOnBottomListener() {
-        return new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
+    private boolean search(String key) {
+        if (mSearchFragment != null) {
+            if (TextUtils.isEmpty(key.trim())) {
+                Toast.makeText(MainActivity.this, R.string.search_key_error, Toast.LENGTH_SHORT).show();
+                return true;
             }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int position = manager.findLastCompletelyVisibleItemPosition();
-                //如果到达了预加载的零界点且不在刷新状态
-                if (position == manager.getItemCount() - PRELOAD_SIZE
-                        && !mArticleAdapter.isRefreshing()
-                        && !mSwipeRefreshLayout.isRefreshing()) {
-                    mArticleAdapter.setRefreshing(true);
-                    mCurrPage += 1;
-                    getPresenter().getArticles(mCurrPage);
-                    Log.i(TAG, "onScrolled: refresh");
-                }
-            }
-        };
+            mSearchFragment.doSearch(key);
+        }
+        return false;
     }
 
     /**
-     * 文章被点击的相关监听
+     * Fragment回调过来需进行搜索
+     *
+     * @param key 关键词
      */
-    public OnArticleItemClickListener getOnArticleItemClickListener() {
-        return new OnArticleItemClickListener() {
-            @Override
-            public void OnArticleItemClick(Article article) {
-                Intent intent = WebActivity.newInstance(MainActivity.this, article.getLink());
-                startActivity(intent);
-            }
-        };
+    @Override
+    public void OnSearchKeyClick(String key) {
+        mSearchEdit.setText(key.trim());
+        mSearchEdit.setSelection(key.trim().length());
+        ImeUtils.hideIme(mSearchEdit);
+        search(key);
     }
 }

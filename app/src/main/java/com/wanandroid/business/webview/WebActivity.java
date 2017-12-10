@@ -28,6 +28,8 @@ import com.wanandroid.utils.SharesUtils;
 
 /**
  * 一个显示WebView的Activity
+ *
+ * TODO：点击网页图片 白屏问题！！！
  */
 public class WebActivity extends AppCompatActivity {
 
@@ -63,10 +65,9 @@ public class WebActivity extends AppCompatActivity {
 
         mWebToolbar = (Toolbar) findViewById(R.id.web_title);
         setSupportActionBar(mWebToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mWebProgress = (ProgressBar) findViewById(R.id.web_progress);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mWebViewContainer = (ViewGroup) findViewById(R.id.base_web_container);
         mWebView = new WebView(getApplicationContext());
@@ -112,7 +113,7 @@ public class WebActivity extends AppCompatActivity {
                 mWebView.reload();
                 break;
             case R.id.action_default_browser:
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getUrl()));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(mWebView.getUrl()));
                 startActivity(intent);
                 break;
             case R.id.action_share:
@@ -120,7 +121,7 @@ public class WebActivity extends AppCompatActivity {
                 break;
             case R.id.action_copy_link:
                 ClipboardManager cmd = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                cmd.setPrimaryClip(ClipData.newPlainText(getString(R.string.copy_link), getUrl()));
+                cmd.setPrimaryClip(ClipData.newPlainText(getString(R.string.copy_link), mWebView.getUrl()));
                 Snackbar.make(getWindow().getDecorView(), R.string.copy_link_success, Snackbar.LENGTH_SHORT).show();
                 break;
             //TODO 收藏待服务端个人中心完成
