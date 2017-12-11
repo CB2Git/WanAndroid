@@ -28,8 +28,8 @@ import com.wanandroid.model.entity.Article;
  */
 public abstract class BaseArticlesFragment<V, P extends BasePresenterImpl<V>> extends BaseMVPFragment<V, P> implements SwipeRefreshLayout.OnRefreshListener {
 
-    //预加载的数量，当滚动到只剩下5个的时候开始加载下一页
-    private static final int PRELOAD_SIZE = 5;
+    //预加载的数量，当滚动到只剩下3个的时候开始加载下一页
+    private static final int PRELOAD_SIZE = 3;
 
     //文章列表
     private RecyclerView mRecyclerView;
@@ -86,13 +86,13 @@ public abstract class BaseArticlesFragment<V, P extends BasePresenterImpl<V>> ex
         mArticleAdapter.setOnArticleItemClickListener(getOnArticleItemClickListener());
 
         //设置SwipeRefreshLayout
-        mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.main_swipe_refresh_layout);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.article_swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeColors(Color.BLUE, Color.YELLOW, Color.RED, Color.GREEN);
         //保证首次能显示刷新
         mSwipeRefreshLayout.measure(0, 0);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
-        mBackTopButton = (FloatingActionButton) root.findViewById(R.id.main_back_top);
+        mBackTopButton = (FloatingActionButton) root.findViewById(R.id.article_back_top);
         mBackTopButton.setOnClickListener(getOnBackTopListener());
     }
 
@@ -228,7 +228,7 @@ public abstract class BaseArticlesFragment<V, P extends BasePresenterImpl<V>> ex
      *
      * @param listener
      */
-    public void OnArticleFragmentRefreshListener(OnArticleFragmentRefreshListener listener) {
+    public void setOnArticleFragmentRefreshListener(OnArticleFragmentRefreshListener listener) {
         mArticleFragmentRefreshListener = listener;
     }
 }

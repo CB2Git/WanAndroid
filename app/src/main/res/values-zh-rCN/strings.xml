@@ -1,12 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">玩安卓</string>
-    <string name="loading">加载中...</string>
+    <string name="app_name">WanAndroid</string>
+    <string name="article_detail_format">%1$s&#160;来自&#160;%2$s</string>
+    <string name="loading">加载中&#8230;</string>
+    <string name="no_more">已经到底了哦</string>
+    <string name="load_more_error">加载好像出问题了</string>
     <string name="collect">收藏</string>
     <string name="refresh">刷新</string>
     <string name="share">分享</string>
     <string name="copy_link">复制链接</string>
+    <string name="copy_link_success">已复制链接</string>
     <string name="default_browser">使用系统浏览器打开</string>
+    <string name="action_share">分享</string>
     <string name="search">搜索</string>
     <string name="classify">分类</string>
+    <string name="search_hint">关键词使用空格隔开</string>
+    <string name="hot_search_hint">大家都在搜</string>
+    <string name="search_key_error">输入条件好像错了哦</string>
+    <string name="search_error">
+        <Data>
+          <![CDATA[未找到与<font color="#f0717e">%1$s</font>相关的内容]]>
+        </Data>
+    </string>
 </resources>

@@ -10,7 +10,7 @@
     <dimen name="search_error_margin_top">60dp</dimen>
 
     <dimen name="classify_dialog_height">300dp</dimen>
-    <dimen name="classify_item_height">45dp</dimen>
+    <dimen name="classify_item_height">44dp</dimen>
     <dimen name="classify_shadow_height">10dp</dimen>
 
     <dimen name="text_size_l">12sp</dimen>

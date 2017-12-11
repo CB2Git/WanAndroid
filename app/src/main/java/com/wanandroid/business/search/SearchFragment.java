@@ -38,6 +38,7 @@ import java.util.List;
  * TODO：搜索历史以后来一发
  * <p>
  * TODO:给搜索加一个清空(返回键~~)可好
+ * TODO:重构
  */
 public class SearchFragment extends BaseMVPFragment<SearchContract.View, SearchPresenter> implements SearchContract.View {
 
@@ -140,6 +141,7 @@ public class SearchFragment extends BaseMVPFragment<SearchContract.View, SearchP
         Log.i(TAG, "displaySearchResult: " + articles.size());
         if (articles.size() != 0) {
             mArticleAdapter.setArticles(articles);
+            mRecyclerView.scrollToPosition(0);
             toggleViewStatue(2);
         } else {
             displaySearchError();
@@ -246,7 +248,6 @@ public class SearchFragment extends BaseMVPFragment<SearchContract.View, SearchP
     @NonNull
     private RecyclerView.OnScrollListener getOnBottomListener() {
         return new RecyclerView.OnScrollListener() {
-
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);

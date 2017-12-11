@@ -1,37 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/main_swipe_refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <include layout="@layout/fragment_article"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/main_article_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/main_back_top"
-        android:layout_width="@dimen/float_action_bar_height"
-        android:layout_height="@dimen/float_action_bar_height"
-        android:layout_gravity="right|bottom"
-        android:layout_marginBottom="@dimen/float_action_bar_margin"
-        android:layout_marginRight="@dimen/float_action_bar_margin"
-        android:clickable="true"
-        android:scaleType="center"
-        android:scaleX="0.0"
-        android:scaleY="0.0"
-        app:backgroundTint="@color/colorPrimary"
-        app:elevation="4dp"
-        app:layout_behavior="com.wanandroid.widget.NestedScaleBehavior"
-        app:srcCompat="@mipmap/ic_back_to_top"/>
-</android.support.design.widget.CoordinatorLayout>
+</FrameLayout>

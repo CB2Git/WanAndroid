@@ -10,7 +10,6 @@ import java.util.List;
 public interface MainContract {
 
     interface View {
-        void showLoading();
 
         void hideLoading();
 
@@ -30,9 +29,9 @@ public interface MainContract {
     interface Presenter {
 
         /**
-         * 新增新数据
+         * 加载下一页数据
          */
-        void getArticles(int page);
+        void loadNextPage();
 
         /**
          * 刷新所有数据，清除旧有数据

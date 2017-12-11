@@ -3,7 +3,6 @@ package com.wanandroid.business.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +50,6 @@ public class WanAndroidArticleAdapter extends RefreshRecycleAdapter<WanAndroidAr
         //这里可能有html,比如搜索接口的数据
         //eg: 用MediaPlayer+Texture<em class='highlight'>View</em>封装一个完美实现全屏、小窗口的视频播放器
         boolean matches = Pattern.matches(".*<em.+?>(.+?)</em>.*", article.getTitle());
-        Log.i(TAG, "onBindNormalViewHolder: Is Html Format:" + matches);
         if (matches) {
             String newArticleTitle = article.getTitle().replaceAll("<em.+?>", "<font color=\"#f0717e\">").replaceAll("</em>", "</font>");
             holder.articleTitle.setText(Html.fromHtml(newArticleTitle));

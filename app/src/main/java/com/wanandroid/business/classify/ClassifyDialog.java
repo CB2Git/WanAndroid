@@ -13,8 +13,10 @@ import android.widget.ListView;
 import com.wanandroid.R;
 import com.wanandroid.business.adapter.CidListAdapter;
 import com.wanandroid.business.base.BaseMVPDialog;
+import com.wanandroid.business.fun.OnClassifyClickListener;
 import com.wanandroid.model.entity.Cid;
 import com.wanandroid.utils.ScreenUtil;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.List;
 
@@ -36,6 +38,13 @@ public class ClassifyDialog extends BaseMVPDialog<ClassifyContract.View, Classif
 
     //是否第一次加载，如果是第一次，则需要将第二级也加载一次
     private boolean isFirstLoadCid = true;
+
+    //外界回调
+    private OnClassifyClickListener mOnClassifyClickListener;
+
+    private AVLoadingIndicatorView mOneCidIndicator;
+
+    private AVLoadingIndicatorView mTwoCidIndicator;
 
     public ClassifyDialog(@NonNull Context context, View anchorView) {
         super(context, R.style.ClassifyDialogStyle);
@@ -72,6 +81,9 @@ public class ClassifyDialog extends BaseMVPDialog<ClassifyContract.View, Classif
         window.setGravity(Gravity.TOP);
         window.setAttributes(attributes);
 
+        mOneCidIndicator = (AVLoadingIndicatorView) findViewById(R.id.classify_one_cid_avi_indicator);
+        mTwoCidIndicator = (AVLoadingIndicatorView) findViewById(R.id.classify_two_cid_avi_indicator);
+
         mCidOne = (ListView) findViewById(R.id.classify_one_cid);
         mCidTwo = (ListView) findViewById(R.id.classify_two_cid);
 
@@ -90,22 +102,32 @@ public class ClassifyDialog extends BaseMVPDialog<ClassifyContract.View, Classif
         return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cid cidItem = (Cid) parent.getAdapter().getItem(position);
                 if (parent.getId() == R.id.classify_one_cid) {
                     mCidOneAdapter.setCurrSelect(position);
-                    Cid oneID = (Cid) mCidOneAdapter.getItem(position);
-                    getBindPresenter().loadTwoCid(oneID.getCidId());
+                    getBindPresenter().loadTwoCid(cidItem.getCidId());
                 }
                 if (parent.getId() == R.id.classify_two_cid) {
                     mCidTwoAdapter.setCurrSelect(position);
+                    if (mOnClassifyClickListener != null) {
+                        mOnClassifyClickListener.onClassifyClickListener(cidItem);
+                    }
+                    dismiss();
                 }
             }
         };
     }
 
+    public void setOnClassifyClickListener(OnClassifyClickListener listener) {
+        mOnClassifyClickListener = listener;
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        getBindPresenter().loadOneCid();
+        if (isFirstLoadCid) {
+            getBindPresenter().loadOneCid();
+        }
     }
 
     @Override
@@ -115,12 +137,18 @@ public class ClassifyDialog extends BaseMVPDialog<ClassifyContract.View, Classif
             mCidOneAdapter.setCurrSelect(0);
             Cid oneID = (Cid) mCidOneAdapter.getItem(0);
             getBindPresenter().loadTwoCid(oneID.getCidId());
+            isFirstLoadCid = false;
         }
+        mOneCidIndicator.setVisibility(View.INVISIBLE);
+        mOneCidIndicator.hide();
+        mCidOne.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void displayOneLoading() {
-
+        mOneCidIndicator.setVisibility(View.VISIBLE);
+        mOneCidIndicator.show();
+        mCidOne.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -131,11 +159,16 @@ public class ClassifyDialog extends BaseMVPDialog<ClassifyContract.View, Classif
     @Override
     public void displayTwoCid(List<Cid> twoCids) {
         mCidTwoAdapter.setCids(twoCids);
+        mTwoCidIndicator.setVisibility(View.INVISIBLE);
+        mTwoCidIndicator.hide();
+        mCidTwo.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void displayTwoLoading() {
-
+        mTwoCidIndicator.setVisibility(View.VISIBLE);
+        mTwoCidIndicator.show();
+        mCidTwo.setVisibility(View.INVISIBLE);
     }
 
     @Override

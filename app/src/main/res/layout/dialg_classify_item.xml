@@ -7,4 +7,4 @@
     android:background="@drawable/classify_view_item_selector"
     android:gravity="center"
     android:textColor="@color/light_black"
-    android:textSize="@dimen/text_size_xh"/>
+    android:textSize="@dimen/text_size_h"/>

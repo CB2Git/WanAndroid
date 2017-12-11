@@ -2,9 +2,7 @@ package com.wanandroid.business.main;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -18,13 +16,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wanandroid.R;
+import com.wanandroid.business.cid.CidFragment;
 import com.wanandroid.business.classify.ClassifyDialog;
+import com.wanandroid.business.fun.OnClassifyClickListener;
 import com.wanandroid.business.fun.OnSearchKeyClickListener;
 import com.wanandroid.business.search.SearchFragment;
+import com.wanandroid.model.entity.Cid;
+import com.wanandroid.utils.ActivityUtils;
 import com.wanandroid.utils.ImeUtils;
 
 /**
  * 应用主界面
+ * <p>
+ * 主要负责Fragment的切换以及事件的传递
+ * </p>
  */
 public class MainActivity extends AppCompatActivity implements OnSearchKeyClickListener {
 
@@ -39,6 +44,12 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
 
     //显示搜索结果的Fragment
     private SearchFragment mSearchFragment;
+
+    //显示"知识体系"详情的Fragment
+    private CidFragment mCidFragment;
+
+    //显示"知识体系"分类的Dialog
+    private ClassifyDialog mClassifyDialog;
 
     //是否进入了搜索状态，搜索状态需要隐藏菜单等
     private boolean mInSearchMode = false;
@@ -60,19 +71,24 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
         mSearchEdit = (EditText) findViewById(R.id.main_edit_search);
         mSearchEdit.setOnEditorActionListener(getEditorAction());
 
-        //初始化Fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        if (savedInstanceState != null) {
-            mArticleFragment = (MainFragment) fragmentManager.findFragmentByTag(MainFragment.class.getName());
-            fragmentManager.beginTransaction()
-                    .show(mArticleFragment)
-                    .commit();
-        } else {
+        if (mArticleFragment == null) {
             mArticleFragment = new MainFragment();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.add(R.id.main_fragment_container, mArticleFragment, MainFragment.class.getName());
-            transaction.commit();
         }
+        ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), mArticleFragment, R.id.main_fragment_container, false);
+
+//        //初始化Fragment，将显示首页的Fragment添加到Activity
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        if (savedInstanceState != null) {
+//            mArticleFragment = (MainFragment) fragmentManager.findFragmentByTag(MainFragment.class.getName());
+//            fragmentManager.beginTransaction()
+//                    .show(mArticleFragment)
+//                    .commit();
+//        } else {
+//            mArticleFragment = new MainFragment();
+//            FragmentTransaction transaction = fragmentManager.beginTransaction();
+//            transaction.add(R.id.main_fragment_container, mArticleFragment, MainFragment.class.getName());
+//            transaction.commit();
+//        }
     }
 
     @Override
@@ -106,15 +122,31 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
         return super.onOptionsItemSelected(item);
     }
 
-    ClassifyDialog dialog = null;
 
     /**
      * 显示分类对话框
      */
     private void showClassifyDialog() {
-        if (dialog == null)
-            dialog = new ClassifyDialog(this, mToolbar);
-        dialog.show();
+        if (mClassifyDialog == null) {
+            mClassifyDialog = new ClassifyDialog(this, mToolbar);
+            mClassifyDialog.setOnClassifyClickListener(new OnClassifyClickListener() {
+                @Override
+                public void onClassifyClickListener(final Cid cid) {
+                    if (mCidFragment == null) {
+                        mCidFragment = new CidFragment();
+                    }
+                    ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), mCidFragment, R.id.main_fragment_container);
+                    //加一个延迟，不然可能fragment还没初始化ok
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mCidFragment.onClassifyClickListener(cid);
+                        }
+                    }, 200);
+                }
+            });
+        }
+        mClassifyDialog.show();
     }
 
     /**
@@ -128,23 +160,20 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
         invalidateOptionsMenu();
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (isSearch) {
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            mSearchFragment = new SearchFragment();
-            transaction
-                    .add(R.id.main_fragment_container, mSearchFragment, SearchFragment.class.getName())
-                    .hide(mArticleFragment)
-                    .addToBackStack(null)
-                    .commit();
+            if (mSearchFragment == null) {
+                mSearchFragment = new SearchFragment();
+            }
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), mSearchFragment, R.id.main_fragment_container);
             //这里加点延迟才能打开键盘
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    mSearchEdit.requestFocus();
                     ImeUtils.showIme(mSearchEdit);
                 }
             }, 200);
         } else {
-            Fragment fragmentByTag = fragmentManager.findFragmentByTag(SearchFragment.class.getName());
-            if (fragmentByTag != null) {
+            if (mSearchFragment != null && mSearchFragment.isAdded()) {
                 fragmentManager.popBackStack();
                 mSearchFragment = null;
             }
@@ -195,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
     }
 
     /**
-     * Fragment回调过来需进行搜索
+     * Fragment回调过来需进行搜索，Activity进行UI上面的一些修改然后再调用回去搜索
      *
      * @param key 关键词
      */

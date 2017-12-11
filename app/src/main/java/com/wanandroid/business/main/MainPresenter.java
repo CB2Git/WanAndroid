@@ -22,14 +22,16 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
 
     private Disposable mLastLoadArticles;
 
+    private int mCurrPage = 0;
+
     public MainPresenter() {
     }
 
     @Override
-    public void getArticles(int page) {
+    public void loadNextPage() {
         mLastLoadArticles = WanAndroidRetrofitClient
                 .getApiService()
-                .getArticleData(page)
+                .getArticleData(mCurrPage + 1)
                 .map(new Function<ArticleData, List<Article>>() {
                     @Override
                     public List<Article> apply(@NonNull ArticleData articleData) throws Exception {
@@ -50,6 +52,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                     @Override
                     public void accept(List<Article> articles) throws Exception {
                         if (isViewAttached()) {
+                            mCurrPage++;
                             getView().displayArticles(articles, false);
                         }
                     }
@@ -77,14 +80,6 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        if (isViewAttached()) {
-                            getView().showLoading();
-                        }
-                    }
-                })
                 .doOnComplete(new Action() {
                     @Override
                     public void run() throws Exception {
@@ -97,6 +92,7 @@ public class MainPresenter extends BasePresenterImpl<MainContract.View> implemen
                     @Override
                     public void accept(List<Article> articles) throws Exception {
                         if (isViewAttached()) {
+                            mCurrPage = 0;
                             getView().displayArticles(articles, true);
                         }
                     }
