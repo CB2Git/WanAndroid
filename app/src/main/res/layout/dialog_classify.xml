@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/classify_dialog_height"
+    android:background="@drawable/classify_dialog_background"
+    android:orientation="horizontal">
+
+    <ListView
+        android:id="@+id/classify_one_cid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/classify_shadow_height"
+        android:layout_weight="1"
+        android:divider="@color/shadow"
+        android:dividerHeight="1dp"
+        android:listSelector="@android:color/transparent"
+        android:scrollbars="none"/>
+
+    <ListView
+        android:id="@+id/classify_two_cid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/classify_shadow_height"
+        android:layout_weight="1"
+        android:background="@color/shadow"
+        android:divider="@color/shadow"
+        android:dividerHeight="1dp"
+        android:listSelector="@android:color/transparent"
+        android:scrollbars="none"/>
+</LinearLayout>

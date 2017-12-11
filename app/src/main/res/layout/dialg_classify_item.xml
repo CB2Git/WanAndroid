@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/classify_cid_text"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/classify_item_height"
+    android:background="@drawable/classify_view_item_selector"
+    android:gravity="center"
+    android:textColor="@color/light_black"
+    android:textSize="@dimen/text_size_xh"/>

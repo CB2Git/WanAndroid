@@ -41,7 +41,7 @@ public class WanAndroidRetrofitClient {
                                 public Response intercept(Chain chain) throws IOException {
                                     Request request = chain.request();
                                     Request cookie = request.newBuilder()
-                                            .header("Cookie", "JSESSIONID=61BDF573D0FAD01B902B7295EF6235DE")
+                                            //.header("Cookie", "JSESSIONID=61BDF573D0FAD01B902B7295EF6235DE")
                                             .build();
                                     return chain.proceed(cookie);
                                 }

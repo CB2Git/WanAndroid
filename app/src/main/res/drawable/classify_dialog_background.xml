@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <gradient
+                android:angle="270"
+                android:endColor="#18ffffff"
+                android:startColor="@android:color/black"/>
+        </shape>
+    </item>
+    <item android:bottom="@dimen/classify_shadow_height">
+        <shape>
+            <solid android:color="@color/material_grey"/>
+        </shape>
+    </item>
+</layer-list>

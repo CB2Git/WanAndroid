@@ -28,7 +28,7 @@ import com.wanandroid.utils.SharesUtils;
 
 /**
  * 一个显示WebView的Activity
- *
+ * <p>
  * TODO：点击网页图片 白屏问题！！！
  */
 public class WebActivity extends AppCompatActivity {
@@ -78,6 +78,7 @@ public class WebActivity extends AppCompatActivity {
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setSupportZoom(true);
+        settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setLoadWithOverviewMode(true);
         settings.setUseWideViewPort(true);
         settings.setDefaultTextEncodingName("utf-8");

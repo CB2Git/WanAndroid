@@ -54,6 +54,4 @@ public class NestedScaleBehavior extends CoordinatorLayout.Behavior<View> {
             }
         }
     }
-
-    //TODO　对于惯性滑动也需要处理哦
 }

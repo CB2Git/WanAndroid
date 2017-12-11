@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wanandroid.R;
+import com.wanandroid.business.classify.ClassifyDialog;
 import com.wanandroid.business.fun.OnSearchKeyClickListener;
 import com.wanandroid.business.search.SearchFragment;
 import com.wanandroid.utils.ImeUtils;
@@ -99,9 +100,21 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
                 changeSearchMode(false);
                 break;
             case R.id.action_show_classify:
+                showClassifyDialog();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    ClassifyDialog dialog = null;
+
+    /**
+     * 显示分类对话框
+     */
+    private void showClassifyDialog() {
+        if (dialog == null)
+            dialog = new ClassifyDialog(this, mToolbar);
+        dialog.show();
     }
 
     /**
@@ -129,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
                     ImeUtils.showIme(mSearchEdit);
                 }
             }, 200);
-
         } else {
             Fragment fragmentByTag = fragmentManager.findFragmentByTag(SearchFragment.class.getName());
             if (fragmentByTag != null) {
