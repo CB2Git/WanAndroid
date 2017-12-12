@@ -1,15 +1,9 @@
 package com.wanandroid.business.search;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,11 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wanandroid.R;
-import com.wanandroid.business.adapter.WanAndroidArticleAdapter;
-import com.wanandroid.business.base.BaseMVPFragment;
-import com.wanandroid.business.fun.OnArticleItemClickListener;
+import com.wanandroid.business.base.BaseArticlesFragment;
+import com.wanandroid.business.fun.OnArticleFragmentRefreshListener;
 import com.wanandroid.business.fun.OnSearchKeyClickListener;
-import com.wanandroid.business.webview.WebActivity;
 import com.wanandroid.model.entity.Article;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.view.flowlayout.FlowLayout;
@@ -40,11 +32,9 @@ import java.util.List;
  * TODO:给搜索加一个清空(返回键~~)可好
  * TODO:重构
  */
-public class SearchFragment extends BaseMVPFragment<SearchContract.View, SearchPresenter> implements SearchContract.View {
+public class SearchFragment extends BaseArticlesFragment<SearchContract.View, SearchPresenter> implements SearchContract.View {
 
     private static final String TAG = "SearchFragment";
-
-    private static final int PRELOAD_SIZE = 5;
 
     //"大家都在搜"流式布局
     private TagFlowLayout mFlowLayout;
@@ -58,16 +48,14 @@ public class SearchFragment extends BaseMVPFragment<SearchContract.View, SearchP
     //状态二:显示加载动画，正在搜索
     private AVLoadingIndicatorView mAVIIndicator;
 
-    //状态三:展示搜索结果
-    private RecyclerView mRecyclerView;
+    //状态三:搜索结果
+    private View mSearchResult;
 
     //状态四:搜索结果为空或者搜索出现了错误
     private TextView mSearchError;
 
     //当前正在搜索的关键词
     private String current_key;
-
-    private WanAndroidArticleAdapter mArticleAdapter;
 
     private OnSearchKeyClickListener mOnSearchKeyClickListener;
 
@@ -82,31 +70,30 @@ public class SearchFragment extends BaseMVPFragment<SearchContract.View, SearchP
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_search, container, false);
+        View root = super.onCreateView(inflater, container, savedInstanceState);
         initView(root);
         initData();
         return root;
+    }
+
+    @Override
+    public View bindFragmentView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_search, container, false);
     }
 
     private void initView(View root) {
         //初始化所有的状态布局
         mHotKeysLayout = (LinearLayout) root.findViewById(R.id.search_hot_key_layout);
         mAVIIndicator = (AVLoadingIndicatorView) root.findViewById(R.id.search_avi_indicator);
-        mRecyclerView = (RecyclerView) root.findViewById(R.id.search_article_list);
+        mSearchResult = getRootView();
         mSearchError = (TextView) root.findViewById(R.id.search_error);
 
         mFlowLayout = (TagFlowLayout) root.findViewById(R.id.search_hot_search);
         mFlowLayout.setOnTagClickListener(getOnTagClickListener());
 
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), OrientationHelper.VERTICAL, false));
-        mRecyclerView.addOnScrollListener(getOnBottomListener());
-
-        mArticleAdapter = new WanAndroidArticleAdapter(getContext());
-        mArticleAdapter.setOnArticleItemClickListener(getOnArticleItemClickListener());
-
-        mRecyclerView.setAdapter(mArticleAdapter);
+        //不允许下拉刷新
+        enablePullRefresh(false);
+        setOnArticleFragmentRefreshListener(getOnArticleFragmentRefreshListener());
 
         toggleViewStatue(-1);
     }
@@ -131,7 +118,7 @@ public class SearchFragment extends BaseMVPFragment<SearchContract.View, SearchP
 
         });
         //当搜索结果不可见的时候才显示热搜界面，以免当搜索结果快于热搜出现造成显示BUG
-        if (mRecyclerView.getVisibility() != View.VISIBLE) {
+        if (mSearchResult.getVisibility() != View.VISIBLE) {
             toggleViewStatue(0);
         }
     }
@@ -140,8 +127,8 @@ public class SearchFragment extends BaseMVPFragment<SearchContract.View, SearchP
     public void displaySearchResult(List<Article> articles) {
         Log.i(TAG, "displaySearchResult: " + articles.size());
         if (articles.size() != 0) {
-            mArticleAdapter.setArticles(articles);
-            mRecyclerView.scrollToPosition(0);
+            getArticleAdapter().setArticles(articles);
+            getRecyclerView().scrollToPosition(0);
             toggleViewStatue(2);
         } else {
             displaySearchError();
@@ -150,18 +137,18 @@ public class SearchFragment extends BaseMVPFragment<SearchContract.View, SearchP
 
     @Override
     public void appendSearchResult(List<Article> articles) {
-        mArticleAdapter.addArticles(articles);
-        mArticleAdapter.setRefreshing(false);
+        getArticleAdapter().addArticles(articles);
+        getArticleAdapter().setRefreshing(false);
     }
 
     @Override
     public void displayNoMore() {
-        mArticleAdapter.setRefreshNoMore();
+        getArticleAdapter().setRefreshNoMore();
     }
 
     @Override
     public void displayLoadMoreError() {
-        mArticleAdapter.setRefreshError();
+        getArticleAdapter().setRefreshError();
     }
 
     @Override
@@ -238,45 +225,20 @@ public class SearchFragment extends BaseMVPFragment<SearchContract.View, SearchP
         } else {
             mAVIIndicator.hide();
         }
-        mRecyclerView.setVisibility(statue == 2 ? View.VISIBLE : View.INVISIBLE);
+        mSearchResult.setVisibility(statue == 2 ? View.VISIBLE : View.INVISIBLE);
         mSearchError.setVisibility(statue == 3 ? View.VISIBLE : View.INVISIBLE);
     }
 
-    /**
-     * RecycleView下滑底部刷新
-     */
-    @NonNull
-    private RecyclerView.OnScrollListener getOnBottomListener() {
-        return new RecyclerView.OnScrollListener() {
+    public OnArticleFragmentRefreshListener getOnArticleFragmentRefreshListener() {
+        return new OnArticleFragmentRefreshListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
+            public void onPullTopRefresh() {
+                //ignore 搜索需要下拉刷新???
             }
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int position = manager.findLastCompletelyVisibleItemPosition();
-                //如果到达了预加载的零界点且不在刷新状态
-                if (position == manager.getItemCount() - PRELOAD_SIZE
-                        && !mArticleAdapter.isRefreshing()) {
-                    mArticleAdapter.setRefreshing(true);
-                    getBindPresenter().doSearchNextPage();
-                }
-            }
-        };
-    }
-
-    /**
-     * 文章被点击的相关监听
-     */
-    public OnArticleItemClickListener getOnArticleItemClickListener() {
-        return new OnArticleItemClickListener() {
-            @Override
-            public void OnArticleItemClick(Article article) {
-                Intent intent = WebActivity.newInstance(getContext(), article.getLink());
-                startActivity(intent);
+            public void onPullBottomRefresh() {
+                getBindPresenter().doSearchNextPage();
             }
         };
     }

@@ -31,6 +31,9 @@ public abstract class BaseArticlesFragment<V, P extends BasePresenterImpl<V>> ex
     //预加载的数量，当滚动到只剩下3个的时候开始加载下一页
     private static final int PRELOAD_SIZE = 3;
 
+    //整体布局
+    private View mRootView;
+
     //文章列表
     private RecyclerView mRecyclerView;
 
@@ -60,7 +63,7 @@ public abstract class BaseArticlesFragment<V, P extends BasePresenterImpl<V>> ex
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = bindFragmentView(inflater, container, savedInstanceState);
         if (root.findViewById(R.id.article_layout) == null) {
-            throw new IllegalStateException("layout must contain fragment_article.xml");
+            throw new IllegalStateException("you layout must include the fragment_article.xml");
         }
         initView(root);
         return root;
@@ -74,6 +77,8 @@ public abstract class BaseArticlesFragment<V, P extends BasePresenterImpl<V>> ex
         mLayoutManager.setOrientation(OrientationHelper.VERTICAL);
 
         mArticleAdapter = new WanAndroidArticleAdapter(getContext());
+
+        mRootView = root.findViewById(R.id.article_layout);
 
         //设置RecycleView
         mRecyclerView = (RecyclerView) root.findViewById(R.id.main_article_list);
@@ -198,6 +203,15 @@ public abstract class BaseArticlesFragment<V, P extends BasePresenterImpl<V>> ex
      */
     public SwipeRefreshLayout getSwipeRefreshLayout() {
         return mSwipeRefreshLayout;
+    }
+
+    /**
+     * 获取视图根布局
+     *
+     * @return
+     */
+    public View getRootView() {
+        return mRootView;
     }
 
     /**
