@@ -6,7 +6,7 @@
 
 ### 最新下载地址
 
-  v1.0.0_beta
+  [v1.0.0_beta](https://raw.githubusercontent.com/CB2Git/WanAndroid/master/release/WanAndroid_1.0.0_beta.apk)
 
 ##### 2017/12/12 星期二 13:58:37 
 
