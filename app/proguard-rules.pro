@@ -24,6 +24,11 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-#com.wang.avi:library:2.1.3
+# buyly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+-keep class android.support.**{*;}
+
+# com.wang.avi:library:2.1.3
 -keep class com.wang.avi.** { *; }
 -keep class com.wang.avi.indicators.** { *; }
