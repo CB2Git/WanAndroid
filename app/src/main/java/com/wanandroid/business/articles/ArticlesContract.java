@@ -1,4 +1,4 @@
-package com.wanandroid.business.main;
+package com.wanandroid.business.articles;
 
 import com.wanandroid.model.entity.Article;
 
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 主界面契约类，主要定义P、V层的接口
  */
-public interface MainContract {
+public interface ArticlesContract {
 
     interface View {
 

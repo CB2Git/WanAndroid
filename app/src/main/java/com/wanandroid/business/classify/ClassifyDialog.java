@@ -20,6 +20,9 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.List;
 
+/**
+ * 显示"知识体系"的分类对话框
+ */
 public class ClassifyDialog extends BaseMVPDialog<ClassifyContract.View, ClassifyPresenter> implements ClassifyContract.View {
 
     private View mAnchorView;

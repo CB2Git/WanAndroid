@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wanandroid.R;
+import com.wanandroid.business.articles.ArticlesFragment;
 import com.wanandroid.business.cid.CidFragment;
 import com.wanandroid.business.classify.ClassifyDialog;
 import com.wanandroid.business.fun.OnClassifyClickListener;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
     private EditText mSearchEdit;
 
     //显示首页数据的Fragment
-    private MainFragment mArticleFragment;
+    private ArticlesFragment mArticleFragment;
 
     //显示搜索结果的Fragment
     private SearchFragment mSearchFragment;
@@ -72,21 +73,21 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
         mSearchEdit.setOnEditorActionListener(getEditorAction());
 
         if (mArticleFragment == null) {
-            mArticleFragment = new MainFragment();
+            mArticleFragment = new ArticlesFragment();
         }
         ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), mArticleFragment, R.id.main_fragment_container, false);
 
 //        //初始化Fragment，将显示首页的Fragment添加到Activity
 //        FragmentManager fragmentManager = getSupportFragmentManager();
 //        if (savedInstanceState != null) {
-//            mArticleFragment = (MainFragment) fragmentManager.findFragmentByTag(MainFragment.class.getName());
+//            mArticleFragment = (ArticlesFragment) fragmentManager.findFragmentByTag(ArticlesFragment.class.getName());
 //            fragmentManager.beginTransaction()
 //                    .show(mArticleFragment)
 //                    .commit();
 //        } else {
-//            mArticleFragment = new MainFragment();
+//            mArticleFragment = new ArticlesFragment();
 //            FragmentTransaction transaction = fragmentManager.beginTransaction();
-//            transaction.add(R.id.main_fragment_container, mArticleFragment, MainFragment.class.getName());
+//            transaction.add(R.id.main_fragment_container, mArticleFragment, ArticlesFragment.class.getName());
 //            transaction.commit();
 //        }
     }

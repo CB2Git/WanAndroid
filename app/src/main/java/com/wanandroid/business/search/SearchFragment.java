@@ -27,10 +27,10 @@ import java.util.List;
 
 /**
  * 显示搜索结果的Fragment
+ *
  * TODO：搜索历史以后来一发
  * <p>
  * TODO:给搜索加一个清空(返回键~~)可好
- * TODO:重构
  */
 public class SearchFragment extends BaseArticlesFragment<SearchContract.View, SearchPresenter> implements SearchContract.View {
 

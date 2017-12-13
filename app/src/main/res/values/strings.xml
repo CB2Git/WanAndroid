@@ -21,4 +21,10 @@
           <![CDATA[未找到与<font color="#f0717e">%1$s</font>相关的内容]]>
         </Data>
     </string>
+
+    <string name="user_name">用户名</string>
+    <string name="password">密码</string>
+    <string name="repassword">重复密码</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
 </resources>

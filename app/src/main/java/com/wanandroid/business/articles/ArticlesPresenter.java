@@ -1,4 +1,4 @@
-package com.wanandroid.business.main;
+package com.wanandroid.business.articles;
 
 import com.wanandroid.model.ArticleData;
 import com.wanandroid.model.api.WanAndroidRetrofitClient;
@@ -18,13 +18,13 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * Created by ${jay} on ${2016/8/17
  */
-public class MainPresenter extends BasePresenterImpl<MainContract.View> implements MainContract.Presenter {
+public class ArticlesPresenter extends BasePresenterImpl<ArticlesContract.View> implements ArticlesContract.Presenter {
 
     private Disposable mLastLoadArticles;
 
     private int mCurrPage = 0;
 
-    public MainPresenter() {
+    public ArticlesPresenter() {
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.wanandroid.business.main;
+package com.wanandroid.business.articles;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,9 +18,9 @@ import java.util.List;
 /**
  * 显示首页数据的Fragment
  */
-public class MainFragment extends BaseArticlesFragment<MainContract.View, MainPresenter> implements MainContract.View {
+public class ArticlesFragment extends BaseArticlesFragment<ArticlesContract.View, ArticlesPresenter> implements ArticlesContract.View {
 
-    private static final String TAG = "MainFragment";
+    private static final String TAG = "ArticlesFragment";
 
     @Override
     public View bindFragmentView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,12 +42,12 @@ public class MainFragment extends BaseArticlesFragment<MainContract.View, MainPr
     }
 
     @Override
-    public MainPresenter bindPresenter() {
-        return new MainPresenter();
+    public ArticlesPresenter bindPresenter() {
+        return new ArticlesPresenter();
     }
 
     @Override
-    public MainContract.View bindView() {
+    public ArticlesContract.View bindView() {
         return this;
     }
 
