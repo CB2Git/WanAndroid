@@ -15,12 +15,12 @@ android {
             storePassword 'chenbing'
         }
     }
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.wanandroid"
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0.0_beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
