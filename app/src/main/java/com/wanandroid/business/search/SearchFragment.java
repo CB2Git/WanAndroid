@@ -15,8 +15,8 @@ import android.widget.TextView;
 
 import com.wanandroid.R;
 import com.wanandroid.business.base.BaseArticlesFragment;
-import com.wanandroid.business.fun.OnArticleFragmentRefreshListener;
-import com.wanandroid.business.fun.OnSearchKeyClickListener;
+import com.wanandroid.business.callback.OnArticleFragmentRefreshListener;
+import com.wanandroid.business.callback.OnSearchKeyClickListener;
 import com.wanandroid.model.entity.Article;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.view.flowlayout.FlowLayout;

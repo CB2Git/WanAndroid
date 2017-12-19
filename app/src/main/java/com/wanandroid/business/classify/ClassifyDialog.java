@@ -13,7 +13,7 @@ import android.widget.ListView;
 import com.wanandroid.R;
 import com.wanandroid.business.adapter.CidListAdapter;
 import com.wanandroid.business.base.BaseMVPDialog;
-import com.wanandroid.business.fun.OnClassifyClickListener;
+import com.wanandroid.business.callback.OnClassifyClickListener;
 import com.wanandroid.model.entity.Cid;
 import com.wanandroid.utils.ScreenUtil;
 import com.wang.avi.AVLoadingIndicatorView;

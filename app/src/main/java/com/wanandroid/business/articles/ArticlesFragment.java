@@ -2,6 +2,7 @@ package com.wanandroid.business.articles;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.wanandroid.R;
 import com.wanandroid.business.base.BaseArticlesFragment;
-import com.wanandroid.business.fun.OnArticleFragmentRefreshListener;
+import com.wanandroid.business.callback.OnArticleFragmentRefreshListener;
 import com.wanandroid.model.entity.Article;
 
 import java.util.List;
@@ -82,8 +83,9 @@ public class ArticlesFragment extends BaseArticlesFragment<ArticlesContract.View
 
     @Override
     public void showErrorMsg(String errorMsg) {
-        //TODO Error提示
         Log.i(TAG, "showErrorMsg: " + errorMsg);
+        getSwipeRefreshLayout().setRefreshing(false);
+        Snackbar.make(getSwipeRefreshLayout(), R.string.load_more_error, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

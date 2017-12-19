@@ -1,10 +1,16 @@
 package com.wanandroid.model.entity;
 
+
+import com.litesuits.orm.db.annotation.PrimaryKey;
+import com.litesuits.orm.db.annotation.Table;
+import com.litesuits.orm.db.enums.AssignType;
+
 import java.util.List;
 
 /**
  * WanAndroid用户信息
  */
+@Table("user")
 public class WanAndroidUser {
 
     /**
@@ -15,11 +21,13 @@ public class WanAndroidUser {
      * type : 0
      * collectIds : []
      */
+    @PrimaryKey(AssignType.BY_MYSELF)
     private int id;
     private String username;
     private String password;
     private String icon;
     private int type;
+
     private List<Integer> collectIds;
 
     public int getId() {
@@ -46,7 +54,7 @@ public class WanAndroidUser {
         this.password = password;
     }
 
-    public Object getIcon() {
+    public String getIcon() {
         return icon;
     }
 

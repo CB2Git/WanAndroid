@@ -18,14 +18,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".business.main.MainActivity">
+
+
+        <activity android:name=".business.welcome.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".business.webview.WebActivity"/>
+
+        <activity android:name=".business.main.MainActivity">
+        </activity>
+        <activity android:name=".business.articledetail.ArticleDetailActivity"/>
         <activity
             android:name="com.tencent.bugly.beta.ui.BetaActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|locale"
@@ -41,13 +46,7 @@
                 android:resource="@xml/provider_paths"/>
         </provider>
 
-        <activity android:name=".business.login.LoginOrResisterActivity">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN"/>-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-            <!--</intent-filter>-->
-        </activity>
+        <activity android:name=".business.login.LoginOrResisterActivity"/>
     </application>
 
 </manifest>

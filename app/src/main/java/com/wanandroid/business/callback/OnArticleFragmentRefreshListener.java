@@ -1,4 +1,4 @@
-package com.wanandroid.business.fun;
+package com.wanandroid.business.callback;
 
 /**
  * {@link com.wanandroid.business.base.BaseArticlesFragment}中的刷新回调

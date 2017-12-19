@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
               android:id="@+id/activity_login"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/colorPrimaryDark"
-              android:fitsSystemWindows="true"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
@@ -26,6 +26,7 @@
         android:paddingTop="40dp">
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/login_use_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/user_name">
@@ -57,9 +58,11 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/login_user_pwd_confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/repassword"
+            android:visibility="gone"
             app:passwordToggleEnabled="true">
 
             <EditText
@@ -72,7 +75,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
-            android:id="@+id/login_button"
+            android:id="@+id/login_or_register_button"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="20dp"
@@ -83,11 +86,15 @@
             android:textSize="18sp"/>
 
         <TextView
+            android:id="@+id/register_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:layout_marginTop="10dp"
-            android:text="没有账户，去注册"/>
+            android:layout_marginTop="14dp"
+            android:clickable="true"
+            android:text="@string/register_tip"
+            android:textColor="@drawable/tip_tv_selector"
+            android:textSize="@dimen/text_size_m"/>
     </LinearLayout>
 
 </LinearLayout>

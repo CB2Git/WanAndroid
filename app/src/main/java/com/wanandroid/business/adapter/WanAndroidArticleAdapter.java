@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.wanandroid.R;
 import com.wanandroid.business.base.adapter.RefreshRecycleAdapter;
-import com.wanandroid.business.fun.OnArticleItemClickListener;
+import com.wanandroid.business.callback.OnArticleItemClickListener;
 import com.wanandroid.model.entity.Article;
 
 import java.util.ArrayList;

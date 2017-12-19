@@ -2,7 +2,7 @@
 
 > 一个对应www.wanandroid.com的App
 
-+ 整体架构使用 MVP+RxJava2+Retrofit2.0
++ 整体架构使用 MVP+RxJava2+Retrofit2.0+OkHttp3.0
 
 ### 最新下载地址
 

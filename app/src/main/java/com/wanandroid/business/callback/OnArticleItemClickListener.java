@@ -1,4 +1,4 @@
-package com.wanandroid.business.fun;
+package com.wanandroid.business.callback;
 
 import com.wanandroid.model.entity.Article;
 

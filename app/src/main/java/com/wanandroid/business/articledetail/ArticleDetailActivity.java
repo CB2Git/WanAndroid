@@ -1,4 +1,4 @@
-package com.wanandroid.business.webview;
+package com.wanandroid.business.articledetail;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -9,13 +9,11 @@ import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -24,57 +22,74 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.wanandroid.R;
+import com.wanandroid.business.base.BaseMVPActivity;
+import com.wanandroid.business.login.LoginOrResisterActivity;
+import com.wanandroid.model.entity.Article;
+import com.wanandroid.model.entity.WanAndroidUser;
+import com.wanandroid.utils.ActivityUtils;
 import com.wanandroid.utils.SharesUtils;
+import com.wanandroid.widget.WebViewFragment;
 
 /**
  * 一个显示WebView的Activity
  * <p>
  * TODO：点击网页图片 白屏问题！！！
  */
-public class WebActivity extends AppCompatActivity {
+public class ArticleDetailActivity extends BaseMVPActivity<ArticleDetailContract.View, ArticleDetailPresenter> implements ArticleDetailContract.View {
 
-    private static final String TAG = "WebActivity";
+    private static final String TAG = "ArticleDetailActivity";
 
     private Toolbar mWebToolbar;
 
-    private ViewGroup mWebViewContainer;
-
     private WebView mWebView;
+
+    private WebViewFragment mWebViewFragment;
 
     private ProgressBar mWebProgress;
 
-    private static final String KEY_URL = "url";
+    //当前显示的文章信息
+    private Article mCurrArticle;
+
+    private static final String ARTICLE_KEY = "article_key";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
+        mCurrArticle = (Article) getIntent().getExtras().getSerializable(ARTICLE_KEY);
         initView();
-        mWebView.loadUrl(getUrl());
     }
 
-    public static Intent newInstance(Context context, String url) {
-        Intent intent = new Intent(context, WebActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putString(KEY_URL, url);
-        intent.putExtras(bundle);
-        return intent;
+    @Override
+    public ArticleDetailPresenter bindPresenter() {
+        return new ArticleDetailPresenter();
     }
 
-    private void initView() {
+    @Override
+    public ArticleDetailContract.View bindView() {
+        return this;
+    }
 
-        mWebToolbar = (Toolbar) findViewById(R.id.web_title);
-        setSupportActionBar(mWebToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    /**
+     * WebView是否已经初始化过了
+     */
+    boolean isWebViewInit = false;
 
-        mWebProgress = (ProgressBar) findViewById(R.id.web_progress);
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!isWebViewInit) {
+            mWebView = mWebViewFragment.getWebView();
+            initWebView();
+            mWebView.loadUrl(mCurrArticle.getLink());
+            isWebViewInit = true;
+        }
+    }
 
-        mWebViewContainer = (ViewGroup) findViewById(R.id.base_web_container);
-        mWebView = new WebView(getApplicationContext());
-        mWebView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        mWebViewContainer.addView(mWebView);
-
-        //设置WebView的一些属性
+    /**
+     * 设置WebView的一些属性
+     */
+    private void initWebView() {
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setSupportZoom(true);
@@ -92,10 +107,35 @@ public class WebActivity extends AppCompatActivity {
         mWebView.setWebChromeClient(new CusWebChromeClient());
     }
 
-    private String getUrl() {
-        String url = getIntent().getExtras().getString(KEY_URL);
-        Log.i(TAG, "openUrl: " + url);
-        return url;
+    public static Intent newInstance(Context context, Article article) {
+        Intent intent = new Intent(context, ArticleDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ARTICLE_KEY, article);
+        intent.putExtras(bundle);
+        return intent;
+    }
+
+    private void initView() {
+        mWebToolbar = findViewById(R.id.web_title);
+        setSupportActionBar(mWebToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mWebProgress = findViewById(R.id.web_progress);
+
+        mWebViewFragment = new WebViewFragment();
+        ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), mWebViewFragment, R.id.base_web_container);
+
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            if (item.getItemId() == R.id.action_collect) {
+                item.setIcon(mCurrArticle.isCollect() ? R.mipmap.ic_collect : R.mipmap.ic_uncollect);
+            }
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -118,47 +158,54 @@ public class WebActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.action_share:
-                SharesUtils.share(this, getUrl());
+                SharesUtils.share(this, mWebView.getUrl());
                 break;
             case R.id.action_copy_link:
                 ClipboardManager cmd = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 cmd.setPrimaryClip(ClipData.newPlainText(getString(R.string.copy_link), mWebView.getUrl()));
                 Snackbar.make(getWindow().getDecorView(), R.string.copy_link_success, Snackbar.LENGTH_SHORT).show();
                 break;
-            //TODO 收藏待服务端个人中心完成
             case R.id.action_collect:
+                doCollectAction();
                 break;
 
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 执行收藏/取消收藏动作
+     */
+    private void doCollectAction() {
+        WanAndroidUser userInfo = getBindPresenter().getUserInfo();
+        if (userInfo == null) {
+            Log.i(TAG, "doCollectAction: UserInfo is null,try autoLogin or register");
+            Intent intent = LoginOrResisterActivity.newInstance(this, true);
+            startActivity(intent);
+            return;
+        }
+        //如果已经登录过了
+        //进行收藏/取消收藏动作
+        if (mCurrArticle.isCollect()) {
+            getBindPresenter().unCollectArticle(mCurrArticle.getId());
+        } else {
+            getBindPresenter().collectArticle(mCurrArticle.getId());
+        }
+    }
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (mWebView != null) {
-            mWebView.onResume();
-            mWebView.resumeTimers();
-        }
     }
 
     @Override
     protected void onPause() {
-        if (mWebView != null) {
-            mWebView.onPause();
-            mWebView.pauseTimers();
-        }
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        if (mWebViewContainer != null) {
-            mWebViewContainer.removeView(mWebView);
-            mWebView.removeAllViews();
-            mWebView.destroy();
-        }
         super.onDestroy();
     }
 
@@ -167,8 +214,34 @@ public class WebActivity extends AppCompatActivity {
         if (mWebView != null && mWebView.canGoBack()) {
             mWebView.goBack();
         } else {
-            super.onBackPressed();
+            finish();
         }
+    }
+
+    @Override
+    public void collectSuccess() {
+        mCurrArticle.setCollect(true);
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public void collectFail() {
+        mCurrArticle.setCollect(false);
+        invalidateOptionsMenu();
+        Snackbar.make(mWebToolbar, R.string.collect_fail, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void unCollectSuccess() {
+        mCurrArticle.setCollect(false);
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public void unCollectFail() {
+        mCurrArticle.setCollect(true);
+        invalidateOptionsMenu();
+        Snackbar.make(mWebToolbar, R.string.uncollect_fail, Snackbar.LENGTH_SHORT).show();
     }
 
     private class CusWebViewClient extends WebViewClient {

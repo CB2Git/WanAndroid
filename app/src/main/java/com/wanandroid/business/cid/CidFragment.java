@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 
 import com.wanandroid.R;
 import com.wanandroid.business.base.BaseArticlesFragment;
-import com.wanandroid.business.fun.OnArticleFragmentRefreshListener;
-import com.wanandroid.business.fun.OnClassifyClickListener;
+import com.wanandroid.business.callback.OnArticleFragmentRefreshListener;
+import com.wanandroid.business.callback.OnClassifyClickListener;
 import com.wanandroid.model.entity.Article;
 import com.wanandroid.model.entity.Cid;
 

@@ -1,9 +1,11 @@
 package com.wanandroid.model.entity;
 
+import java.io.Serializable;
+
 /**
  * 首页文章信息
  */
-public class Article {
+public class Article implements Serializable {
     /**
      * id : 1541
      * title :  Android开发中dip，dpi，density，px等详解

@@ -18,9 +18,9 @@ import android.view.ViewGroup;
 
 import com.wanandroid.R;
 import com.wanandroid.business.adapter.WanAndroidArticleAdapter;
-import com.wanandroid.business.fun.OnArticleFragmentRefreshListener;
-import com.wanandroid.business.fun.OnArticleItemClickListener;
-import com.wanandroid.business.webview.WebActivity;
+import com.wanandroid.business.callback.OnArticleFragmentRefreshListener;
+import com.wanandroid.business.callback.OnArticleItemClickListener;
+import com.wanandroid.business.articledetail.ArticleDetailActivity;
 import com.wanandroid.model.entity.Article;
 
 /**
@@ -164,7 +164,7 @@ public abstract class BaseArticlesFragment<V, P extends BasePresenterImpl<V>> ex
             public void OnArticleItemClick(Article article) {
                 //如果子类没有设置点击响应，那么使用默认的操作
                 if (mOnArticleItemClickListener == null) {
-                    Intent intent = WebActivity.newInstance(getContext(), article.getLink());
+                    Intent intent = ArticleDetailActivity.newInstance(getContext(), article);
                     startActivity(intent);
                 } else {
                     mOnArticleItemClickListener.OnArticleItemClick(article);

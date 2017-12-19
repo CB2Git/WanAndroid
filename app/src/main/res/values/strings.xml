@@ -27,4 +27,14 @@
     <string name="repassword">重复密码</string>
     <string name="login">登录</string>
     <string name="register">注册</string>
+    <string name="register_tip">没有账户，去注册</string>
+    <string name="login_tip">已有账户，去登录</string>
+    <string name="user_name_empty">用户名为空</string>
+    <string name="psw_empty">密码为空</string>
+    <string name="pwd_unequals">密码不一致</string>
+    <string name="user_name_too_short">用户名过短</string>
+    <string name="login_fail">登录失败</string>
+    <string name="register_fail">注册失败</string>
+    <string name="collect_fail">收藏失败</string>
+    <string name="uncollect_fail">取消收藏失败</string>
 </resources>

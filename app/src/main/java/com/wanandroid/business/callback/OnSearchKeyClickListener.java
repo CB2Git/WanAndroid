@@ -1,4 +1,4 @@
-package com.wanandroid.business.fun;
+package com.wanandroid.business.callback;
 
 /**
  * 点击"大家都在搜"的回调

@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.litesuits.orm.LiteOrm;
+import com.litesuits.orm.db.DataBaseConfig;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -12,10 +14,25 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class WanApplication extends Application {
+
+    private static final String DB_NAME = "wanandroid.db";
+
+    public static LiteOrm liteOrm;
+
     @Override
     public void onCreate() {
         super.onCreate();
         initBuyly();
+        initLiteOrm();
+    }
+
+    private void initLiteOrm() {
+        DataBaseConfig config = new DataBaseConfig(this);
+        config.debugged = BuildConfig.LOG_DEBUG;
+        config.dbName = DB_NAME;
+        config.dbVersion = 1;
+        config.onUpdateListener = null;
+        liteOrm = LiteOrm.newSingleInstance(config);
     }
 
     private void initBuyly() {
