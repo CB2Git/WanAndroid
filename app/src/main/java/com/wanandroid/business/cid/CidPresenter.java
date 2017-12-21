@@ -81,7 +81,7 @@ public class CidPresenter extends BasePresenterImpl<CidContract.View> implements
                         } else {
                             mCurrPage++;
                             getView().displayArticles(articles, false);
-                            getView().hideLoading();
+                            getView().hideLoadMore();
                         }
                     }
                 }, new Consumer<Throwable>() {

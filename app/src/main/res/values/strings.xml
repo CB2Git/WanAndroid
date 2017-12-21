@@ -4,7 +4,6 @@
     <string name="loading">加载中&#8230;</string>
     <string name="no_more">已经到底了哦</string>
     <string name="load_more_error">加载好像出问题了</string>
-    <string name="collect">收藏</string>
     <string name="refresh">刷新</string>
     <string name="share">分享</string>
     <string name="copy_link">复制链接</string>
@@ -37,4 +36,15 @@
     <string name="register_fail">注册失败</string>
     <string name="collect_fail">收藏失败</string>
     <string name="uncollect_fail">取消收藏失败</string>
+    <string name="home">首页</string>
+    <string name="quit_login">注销</string>
+    <string name="setting">设置</string>
+    <string name="about_me">关于</string>
+    <string name="unlogin">未登录</string>
+    <string name="cid">知识体系</string>
+    <string name="prompt">提示</string>
+    <string name="are_you_sure_quit_login">是否退出登录?</string>
+    <string name="confirm">确定</string>
+    <string name="collect">收藏</string>
+    <string name="unlogin_tip">已经退出登录</string>
 </resources>

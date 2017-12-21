@@ -1,28 +1,39 @@
 package com.wanandroid.business.main;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wanandroid.R;
 import com.wanandroid.business.articles.ArticlesFragment;
-import com.wanandroid.business.cid.CidFragment;
-import com.wanandroid.business.classify.ClassifyDialog;
 import com.wanandroid.business.callback.OnClassifyClickListener;
 import com.wanandroid.business.callback.OnSearchKeyClickListener;
+import com.wanandroid.business.callback.OnSetToolbarTitleCallBack;
+import com.wanandroid.business.cid.CidFragment;
+import com.wanandroid.business.classify.ClassifyDialog;
+import com.wanandroid.business.collects.CollectFragment;
+import com.wanandroid.business.login.LoginOrResisterActivity;
 import com.wanandroid.business.search.SearchFragment;
+import com.wanandroid.model.db.UserManger;
 import com.wanandroid.model.entity.Cid;
+import com.wanandroid.model.utils.WanAndroidCookieJar;
 import com.wanandroid.utils.ActivityUtils;
 import com.wanandroid.utils.ImeUtils;
 
@@ -32,13 +43,12 @@ import com.wanandroid.utils.ImeUtils;
  * 主要负责Fragment的切换以及事件的传递
  * </p>
  */
-public class MainActivity extends AppCompatActivity implements OnSearchKeyClickListener {
+public class MainActivity extends AppCompatActivity implements OnSearchKeyClickListener, OnSetToolbarTitleCallBack {
 
     private static final String TAG = "MainActivity";
 
-    private Toolbar mToolbar;
-
-    private EditText mSearchEdit;
+    //管理全部控件的Holder
+    private MainActivityHolder mHolder;
 
     //显示首页数据的Fragment
     private ArticlesFragment mArticleFragment;
@@ -52,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
     //显示"知识体系"分类的Dialog
     private ClassifyDialog mClassifyDialog;
 
+    //显示收藏列表的Fragment
+    private CollectFragment mCollectFragment;
+
     //是否进入了搜索状态，搜索状态需要隐藏菜单等
     private boolean mInSearchMode = false;
 
@@ -62,34 +75,35 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
         initView(savedInstanceState);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //每一次进入界面都刷新用户信息，因为可能开始没有登录，后来登录了
+        mHolder.initUserInfo(UserManger.getUserInfo());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //自动关闭侧滑菜单哦~~~
+        mHolder.closeDrawer();
+    }
 
     private void initView(Bundle savedInstanceState) {
-        //设置顶部标题栏
-        mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(mToolbar);
-
+        mHolder = new MainActivityHolder(this);
+        //初始化登录用户信息
+        mHolder.initUserInfo(UserManger.getUserInfo());
         //为EditText设置搜索监听
-        mSearchEdit = (EditText) findViewById(R.id.main_edit_search);
-        mSearchEdit.setOnEditorActionListener(getEditorAction());
-
+        mHolder.getSearchEdit().setOnEditorActionListener(getEditorAction());
         if (mArticleFragment == null) {
             mArticleFragment = new ArticlesFragment();
         }
+        //设置滑出菜单选中"主页"
+        mHolder.getNavigationView().setCheckedItem(R.id.action_home);
+        mHolder.getNavigationView().setNavigationItemSelectedListener(getNavigationItemSelectedListener());
+        //设置点击用户头像响应
+        mHolder.getUserImage().setOnClickListener(getOnClickUserImageListener());
         ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), mArticleFragment, R.id.main_fragment_container, false);
-
-//        //初始化Fragment，将显示首页的Fragment添加到Activity
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        if (savedInstanceState != null) {
-//            mArticleFragment = (ArticlesFragment) fragmentManager.findFragmentByTag(ArticlesFragment.class.getName());
-//            fragmentManager.beginTransaction()
-//                    .show(mArticleFragment)
-//                    .commit();
-//        } else {
-//            mArticleFragment = new ArticlesFragment();
-//            FragmentTransaction transaction = fragmentManager.beginTransaction();
-//            transaction.add(R.id.main_fragment_container, mArticleFragment, ArticlesFragment.class.getName());
-//            transaction.commit();
-//        }
     }
 
     @Override
@@ -111,10 +125,10 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
-                changeSearchMode(true);
+                switchSearchMode(true);
                 break;
             case android.R.id.home:
-                changeSearchMode(false);
+                switchSearchMode(false);
                 break;
             case R.id.action_show_classify:
                 showClassifyDialog();
@@ -129,23 +143,8 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
      */
     private void showClassifyDialog() {
         if (mClassifyDialog == null) {
-            mClassifyDialog = new ClassifyDialog(this, mToolbar);
-            mClassifyDialog.setOnClassifyClickListener(new OnClassifyClickListener() {
-                @Override
-                public void onClassifyClickListener(final Cid cid) {
-                    if (mCidFragment == null) {
-                        mCidFragment = new CidFragment();
-                    }
-                    ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), mCidFragment, R.id.main_fragment_container);
-                    //加一个延迟，不然可能fragment还没初始化ok
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mCidFragment.onClassifyClickListener(cid);
-                        }
-                    }, 200);
-                }
-            });
+            mClassifyDialog = new ClassifyDialog(this, mHolder.getToolbar());
+            mClassifyDialog.setOnClassifyClickListener(getOnCidClickListener());
         }
         mClassifyDialog.show();
     }
@@ -153,12 +152,19 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
     /**
      * 当用户点搜索按钮的时候切换到搜索视图
      */
-    private void changeSearchMode(boolean isSearch) {
+    private void switchSearchMode(boolean isSearch) {
         mInSearchMode = isSearch;
-        mSearchEdit.setVisibility(isSearch ? View.VISIBLE : View.GONE);
-        mSearchEdit.setText("");
+        mHolder.getSearchEdit().setVisibility(isSearch ? View.VISIBLE : View.GONE);
+        mHolder.getSearchEdit().setText("");
         //刷新菜单
         invalidateOptionsMenu();
+        //搜索视图不显示侧滑菜单
+        if (isSearch) {
+            mHolder.getToolbar().setNavigationIcon(null);
+        } else {
+            mHolder.getToolbar().setNavigationIcon(R.mipmap.ic_menu);
+        }
+        mHolder.getDrawerLayout().setEnabled(!isSearch);
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (isSearch) {
             if (mSearchFragment == null) {
@@ -169,8 +175,8 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mSearchEdit.requestFocus();
-                    ImeUtils.showIme(mSearchEdit);
+                    mHolder.getSearchEdit().requestFocus();
+                    ImeUtils.showIme(mHolder.getSearchEdit());
                 }
             }, 200);
         } else {
@@ -179,6 +185,136 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
                 mSearchFragment = null;
             }
         }
+    }
+
+    /**
+     * 侧滑菜单菜单项被点击的处理
+     */
+    private NavigationView.OnNavigationItemSelectedListener getNavigationItemSelectedListener() {
+        return new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                //显示首页
+                if (itemId == R.id.action_home) {
+                    doShowHomePage();
+                    return true;
+                }
+                //展示收藏列表
+                if (itemId == R.id.action_collect_list) {
+                    return doShowCollects();
+                }
+                //退出登录
+                if (itemId == R.id.action_quit_login) {
+                    doQuitLogin();
+                }
+                //关于我
+                if (itemId == R.id.action_about_me) {
+                    doAboutMe();
+                }
+                return false;
+            }
+        };
+    }
+
+    /**
+     * 显示关于我
+     */
+    private void doAboutMe() {
+    }
+
+    /**
+     * 显示收藏列表
+     */
+    private boolean doShowCollects() {
+
+        //如果没有登录，则点击跳转到登录界面
+        if (UserManger.getUserInfo() == null) {
+            Intent intent = LoginOrResisterActivity.newInstance(this, true);
+            startActivity(intent);
+            return false;
+        }
+
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        Log.i(TAG, "doShowHomePage: fragment count = " + count);
+        mHolder.closeDrawer();
+        if (mCollectFragment == null) {
+            mCollectFragment = new CollectFragment();
+            for (int i = 0; i < count; i++) {
+                getSupportFragmentManager().popBackStack();
+            }
+        }
+        ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), mCollectFragment, R.id.main_fragment_container, false);
+        return true;
+    }
+
+    /**
+     * 显示主页
+     */
+    private void doShowHomePage() {
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        Log.i(TAG, "doShowHomePage: fragment count = " + count);
+        //清空回退栈
+        for (int i = 0; i < count; i++) {
+            getSupportFragmentManager().popBackStack();
+        }
+        //移除掉收藏列表，如果存在的话
+        if (mCollectFragment != null && mCollectFragment.isAdded()) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.remove(mCollectFragment);
+            transaction.commit();
+            mCollectFragment = null;
+        }
+        mHolder.closeDrawer();
+    }
+
+    /**
+     * 退出登录
+     */
+    private void doQuitLogin() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.prompt);
+        builder.setMessage(R.string.are_you_sure_quit_login);
+        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //清理数据库信息
+                UserManger.clearUserInfo();
+                //清理cookie信息
+                WanAndroidCookieJar.clearCookie();
+                //清理界面显示
+                mHolder.clearUserInfo();
+                Snackbar.make(mHolder.getToolbar(), R.string.unlogin_tip, Snackbar.LENGTH_SHORT).show();
+                //返回主页
+                doShowHomePage();
+                mHolder.getNavigationView().setCheckedItem(R.id.action_home);
+            }
+        });
+        builder.show();
+        mHolder.closeDrawer();
+    }
+
+    /**
+     * 用户切换了"知识体系"的回调
+     */
+    @NonNull
+    private OnClassifyClickListener getOnCidClickListener() {
+        return new OnClassifyClickListener() {
+            @Override
+            public void onClassifyClickListener(final Cid cid) {
+                if (mCidFragment == null) {
+                    mCidFragment = new CidFragment();
+                }
+                ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), mCidFragment, R.id.main_fragment_container);
+                //加一个延迟，不然可能fragment还没初始化ok
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mCidFragment.onClassifyClickListener(cid);
+                    }
+                }, 200);
+            }
+        };
     }
 
     @Override
@@ -190,11 +326,30 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
         if (!consumed) {
             //自己处理返回事件
             if (mInSearchMode) {
-                changeSearchMode(false);
+                switchSearchMode(false);
+                return;
+            }
+            if (mHolder.isDrawerOpen()) {
+                mHolder.closeDrawer();
                 return;
             }
             super.onBackPressed();
         }
+    }
+
+    private View.OnClickListener getOnClickUserImageListener() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (UserManger.getUserInfo() == null) {
+                    Intent intent = LoginOrResisterActivity.newInstance(MainActivity.this, true);
+                    startActivity(intent);
+                } else {
+                    //TODO 跳转到个人中心
+                    Toast.makeText(MainActivity.this, "未完待续哦~~", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
     }
 
     /**
@@ -231,9 +386,17 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
      */
     @Override
     public void OnSearchKeyClick(String key) {
-        mSearchEdit.setText(key.trim());
-        mSearchEdit.setSelection(key.trim().length());
-        ImeUtils.hideIme(mSearchEdit);
+        mHolder.getSearchEdit().setText(key.trim());
+        mHolder.getSearchEdit().setSelection(key.trim().length());
+        ImeUtils.hideIme(mHolder.getSearchEdit());
         search(key);
+    }
+
+    /**
+     * Fragment需要改变顶部标题文字
+     */
+    @Override
+    public void setToolbarTitle(String title) {
+        mHolder.getToolbar().setTitle(title);
     }
 }

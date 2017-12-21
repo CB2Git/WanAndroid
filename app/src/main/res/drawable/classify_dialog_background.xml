@@ -4,8 +4,8 @@
         <shape>
             <gradient
                 android:angle="270"
-                android:endColor="#18ffffff"
-                android:startColor="@android:color/black"/>
+                android:endColor="#00000000"
+                android:startColor="#aa000000"/>
         </shape>
     </item>
     <item android:bottom="@dimen/classify_shadow_height">

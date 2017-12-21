@@ -1,5 +1,6 @@
 package com.wanandroid.business.cid;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,6 +13,7 @@ import com.wanandroid.R;
 import com.wanandroid.business.base.BaseArticlesFragment;
 import com.wanandroid.business.callback.OnArticleFragmentRefreshListener;
 import com.wanandroid.business.callback.OnClassifyClickListener;
+import com.wanandroid.business.callback.OnSetToolbarTitleCallBack;
 import com.wanandroid.model.entity.Article;
 import com.wanandroid.model.entity.Cid;
 
@@ -26,10 +28,20 @@ public class CidFragment extends BaseArticlesFragment<CidContract.View, CidPrese
 
     private Cid mCurrCid;
 
+    private OnSetToolbarTitleCallBack mOnSetToolbarTitleCallBack;
+
     @Override
     public View bindFragmentView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_cid, container, false);
         return root;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnSetToolbarTitleCallBack) {
+            mOnSetToolbarTitleCallBack = (OnSetToolbarTitleCallBack) context;
+        }
     }
 
     @Override
@@ -42,6 +54,17 @@ public class CidFragment extends BaseArticlesFragment<CidContract.View, CidPrese
         enablePullRefresh(true);
         enablePullBottomRefresh(true);
         setOnArticleFragmentRefreshListener(getOnArticleFragmentRefreshListener());
+        if (mOnSetToolbarTitleCallBack != null) {
+            mOnSetToolbarTitleCallBack.setToolbarTitle(getString(R.string.cid));
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mOnSetToolbarTitleCallBack != null) {
+            mOnSetToolbarTitleCallBack.setToolbarTitle(getString(R.string.app_name));
+        }
     }
 
     @Override
