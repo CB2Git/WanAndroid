@@ -33,10 +33,6 @@ public interface WanAndroidApi {
     Observable<AuthData> login(@Field("username") String userName, @Field("password") String pwd);
 
     //收藏列表
-    //@GET("lg/collect/list/{page}/json")
-    //Observable<CollectedArticleData> getCollectData(@Path("page") int page, @Header("cookie") String cookie);
-
-    //收藏列表
     @GET("lg/collect/list/{page}/json")
     Observable<CollectedArticleData> getCollectData(@Path("page") int page);
 

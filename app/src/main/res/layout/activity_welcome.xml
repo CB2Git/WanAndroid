@@ -1,12 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/ic_welcome_default"
+        android:visibility="visible"/>
+
+    <!--由于本人色感较差，所以这里使用一个图层调整亮度-->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#47000000"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:src="@mipmap/ic_wanandroid_logo"/>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom"
+        android:background="#560f0f0f"
         android:gravity="center"
-        android:text="welcome user this shit"/>
-</LinearLayout>
+        android:text="致技术人"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/text_size_xxh"
+        android:visibility="gone"/>
+</FrameLayout>

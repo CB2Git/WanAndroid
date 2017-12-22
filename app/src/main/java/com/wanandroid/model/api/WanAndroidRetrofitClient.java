@@ -1,10 +1,7 @@
 package com.wanandroid.model.api;
 
-import com.wanandroid.BuildConfig;
-import com.wanandroid.model.utils.WanAndroidCookieJar;
+import com.wanandroid.model.utils.OkHttpClientManger;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -22,22 +19,14 @@ public class WanAndroidRetrofitClient {
 
     private static Retrofit mRetrofitClient = null;
 
-    private static Retrofit getRetroClient() {
+    public static Retrofit getRetroClient() {
         if (mRetrofitClient == null) {
             synchronized (WanAndroidRetrofitClient.class) {
                 if (mRetrofitClient == null) {
-                    HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-                    loggingInterceptor.setLevel(BuildConfig.LOG_DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
-
-                    OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                            .cookieJar(new WanAndroidCookieJar())
-                            .addNetworkInterceptor(loggingInterceptor)
-                            .retryOnConnectionFailure(true)
-                            .build();
                     mRetrofitClient = new Retrofit
                             .Builder()
                             .baseUrl(BASE_URL)
-                            .client(okHttpClient)
+                            .client(OkHttpClientManger.getOkHttpClient())
                             .addConverterFactory(GsonConverterFactory.create())
                             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                             .build();

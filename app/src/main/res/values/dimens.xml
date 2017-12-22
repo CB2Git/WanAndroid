@@ -14,10 +14,12 @@
     <dimen name="classify_shadow_height">10dp</dimen>
 
     <dimen name="main_navigation_bar_width">270dp</dimen>
-    <dimen name="main_navigation_header_height">150dp</dimen>
+    <dimen name="main_navigation_header_height">180dp</dimen>
 
     <dimen name="text_size_l">12sp</dimen>
     <dimen name="text_size_m">14sp</dimen>
     <dimen name="text_size_h">16sp</dimen>
     <dimen name="text_size_xh">18sp</dimen>
+    <dimen name="text_size_xxh">20sp</dimen>
+    <dimen name="text_size_xxxh">22sp</dimen>
 </resources>

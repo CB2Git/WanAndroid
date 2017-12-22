@@ -1,7 +1,6 @@
 package com.wanandroid.business.base;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,9 +17,9 @@ import android.view.ViewGroup;
 
 import com.wanandroid.R;
 import com.wanandroid.business.adapter.WanAndroidArticleAdapter;
+import com.wanandroid.business.articledetail.ArticleDetailActivity;
 import com.wanandroid.business.callback.OnArticleFragmentRefreshListener;
 import com.wanandroid.business.callback.OnArticleItemClickListener;
-import com.wanandroid.business.articledetail.ArticleDetailActivity;
 import com.wanandroid.model.entity.Article;
 
 /**
@@ -81,7 +80,7 @@ public abstract class BaseArticlesFragment<V, P extends BasePresenterImpl<V>> ex
         mRootView = root.findViewById(R.id.article_layout);
 
         //设置RecycleView
-        mRecyclerView = (RecyclerView) root.findViewById(R.id.main_article_list);
+        mRecyclerView = root.findViewById(R.id.main_article_list);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -91,13 +90,15 @@ public abstract class BaseArticlesFragment<V, P extends BasePresenterImpl<V>> ex
         mArticleAdapter.setOnArticleItemClickListener(getOnArticleItemClickListener());
 
         //设置SwipeRefreshLayout
-        mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.article_swipe_refresh_layout);
-        mSwipeRefreshLayout.setColorSchemeColors(Color.BLUE, Color.YELLOW, Color.RED, Color.GREEN);
+        mSwipeRefreshLayout = root.findViewById(R.id.article_swipe_refresh_layout);
+        mSwipeRefreshLayout.setColorSchemeResources(
+                R.color.colorAccent
+        );
         //保证首次能显示刷新
         mSwipeRefreshLayout.measure(0, 0);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
-        mBackTopButton = (FloatingActionButton) root.findViewById(R.id.article_back_top);
+        mBackTopButton = root.findViewById(R.id.article_back_top);
         mBackTopButton.setOnClickListener(getOnBackTopListener());
     }
 

@@ -3,6 +3,8 @@ package com.wanandroid.business.welcome;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.wanandroid.R;
 import com.wanandroid.business.base.BaseMVPActivity;
@@ -17,6 +19,8 @@ public class WelcomeActivity extends BaseMVPActivity<WelcomeContract.View, Welco
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
         getBindPresenter().autoLogin();
@@ -27,6 +31,7 @@ public class WelcomeActivity extends BaseMVPActivity<WelcomeContract.View, Welco
                 intent.setClass(WelcomeActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         }, 3000);
     }

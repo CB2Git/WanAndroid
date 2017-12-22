@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wanandroid.R;
+import com.wanandroid.business.about.AboutMeActivity;
 import com.wanandroid.business.articles.ArticlesFragment;
 import com.wanandroid.business.callback.OnClassifyClickListener;
 import com.wanandroid.business.callback.OnSearchKeyClickListener;
@@ -36,6 +37,7 @@ import com.wanandroid.model.entity.Cid;
 import com.wanandroid.model.utils.WanAndroidCookieJar;
 import com.wanandroid.utils.ActivityUtils;
 import com.wanandroid.utils.ImeUtils;
+import com.wanandroid.utils.StatusBarUtil;
 
 /**
  * 应用主界面
@@ -43,7 +45,7 @@ import com.wanandroid.utils.ImeUtils;
  * 主要负责Fragment的切换以及事件的传递
  * </p>
  */
-public class MainActivity extends AppCompatActivity implements OnSearchKeyClickListener, OnSetToolbarTitleCallBack {
+public class MainActivity extends AppCompatActivity implements OnSearchKeyClickListener, OnSetToolbarTitleCallBack, StatusBarUtil.StatusBarInterface {
 
     private static final String TAG = "MainActivity";
 
@@ -221,6 +223,8 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
      * 显示关于我
      */
     private void doAboutMe() {
+        Intent intent = new Intent(this, AboutMeActivity.class);
+        startActivity(intent);
     }
 
     /**

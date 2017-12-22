@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,12 +15,13 @@ import android.widget.TextView;
 import com.wanandroid.R;
 import com.wanandroid.business.base.BaseMVPActivity;
 import com.wanandroid.model.entity.WanAndroidUser;
+import com.wanandroid.utils.StatusBarUtil;
 import com.wanandroid.widget.CusProgressDialog;
 
 /**
  * 负责用户登录注册的Activity
  */
-public class LoginOrResisterActivity extends BaseMVPActivity<LoginOrRegisterContract.View, LoginOrRegisterPresenter> implements LoginOrRegisterContract.View {
+public class LoginOrResisterActivity extends BaseMVPActivity<LoginOrRegisterContract.View, LoginOrRegisterPresenter> implements LoginOrRegisterContract.View, StatusBarUtil.StatusBarInterface {
 
     private static final String AUTO_FINISH = "AUTO_FINISH";
 
@@ -28,6 +30,8 @@ public class LoginOrResisterActivity extends BaseMVPActivity<LoginOrRegisterCont
     public static final int RESULT_CODE = 10010;
 
     public static final String LOGIN_OR_REGISTER = "login_or_register_result";
+
+    private android.support.v7.widget.Toolbar mToolbar;
 
     private TextInputLayout mUserName;
 
@@ -92,6 +96,13 @@ public class LoginOrResisterActivity extends BaseMVPActivity<LoginOrRegisterCont
         mLoginOrRegisterBtn = findViewById(R.id.login_or_register_button);
         mLoginOrRegisterTv = findViewById(R.id.register_tv);
 
+        mToolbar = findViewById(R.id.login_toolbar);
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+
         mLoginOrRegisterBtn.setOnClickListener(getOnClickListener());
         mLoginOrRegisterTv.setOnClickListener(getOnClickListener());
 
@@ -104,6 +115,14 @@ public class LoginOrResisterActivity extends BaseMVPActivity<LoginOrRegisterCont
 
             mUserName.getEditText().setSelection(mUserName.getEditText().getText().length());
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public View.OnClickListener getOnClickListener() {

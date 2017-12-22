@@ -15,5 +15,10 @@ public interface WelcomeContract {
          * 根据本地的用户信息自动登录下
          */
         void autoLogin();
+
+        /**
+         * 加载每日一句
+         */
+        void loadEveryDayNiceWord();
     }
 }

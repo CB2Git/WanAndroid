@@ -18,16 +18,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-
-        <activity android:name=".business.welcome.WelcomeActivity">
+        <activity
+            android:name=".business.welcome.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity android:name=".business.main.MainActivity">
         </activity>
         <activity android:name=".business.articledetail.ArticleDetailActivity"/>
@@ -47,6 +45,8 @@
         </provider>
 
         <activity android:name=".business.login.LoginOrResisterActivity"/>
+        <activity android:name=".business.about.AboutMeActivity">
+        </activity>
     </application>
 
 </manifest>

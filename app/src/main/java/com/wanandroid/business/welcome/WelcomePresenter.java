@@ -15,9 +15,8 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by ${jay} on ${2016/8/17
+ * app启动闪屏界面
  */
-
 public class WelcomePresenter extends BasePresenterImpl<WelcomeContract.View> implements WelcomeContract.Presenter {
 
     private static final String TAG = "WelcomePresenter";
@@ -40,7 +39,7 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeContract.View> im
                     .subscribe(new Consumer<WanAndroidUser>() {
                         @Override
                         public void accept(WanAndroidUser wanAndroidUser) throws Exception {
-
+                            Log.i(TAG, "accept: auto login success");
                         }
                     }, new Consumer<Throwable>() {
                         @Override
@@ -49,6 +48,13 @@ public class WelcomePresenter extends BasePresenterImpl<WelcomeContract.View> im
                         }
                     });
             addDisposable(disposable);
+        } else {
+            Log.w(TAG, "autoLogin: local userinfo is empty");
         }
+    }
+
+    @Override
+    public void loadEveryDayNiceWord() {
+       // OkHttpClientManger.getOkHttpClient().
     }
 }
