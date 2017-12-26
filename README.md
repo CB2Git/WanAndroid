@@ -4,9 +4,25 @@
 
 + 整体架构使用 MVP+RxJava2+Retrofit2.0+OkHttp3.0
 
-### 最新下载地址
+## 最新下载地址
 
-  [v1.0.0_beta](https://raw.githubusercontent.com/CB2Git/WanAndroid/master/release/WanAndroid_1.0.0_beta.apk)
+  [v1.0.0_beta](https://raw.githubusercontent.com/CB2Git/WanAndroid/master/release/WanAndroid_1.0.0.apk)
+
+### 应用截图
+
+懒得截图了....
+
+
+#### 更新日志
+
+##### 2017/12/26 星期二 20:01:12 
+
+> 发布1.0正式版
+
+Done:
+
+1. 加入登录、注册、收藏等功能
+2. 优化UI显示，修改主题色等
 
 ##### 2017/12/12 星期二 13:58:37 
 
