@@ -28,7 +28,6 @@ import com.wanandroid.model.entity.Article;
 import com.wanandroid.model.entity.WanAndroidUser;
 import com.wanandroid.utils.ActivityUtils;
 import com.wanandroid.utils.SharesUtils;
-import com.wanandroid.utils.StatusBarUtil;
 import com.wanandroid.widget.WebViewFragment;
 
 /**
@@ -36,7 +35,7 @@ import com.wanandroid.widget.WebViewFragment;
  * <p>
  * TODO：点击网页图片 白屏问题！！！
  */
-public class ArticleDetailActivity extends BaseMVPActivity<ArticleDetailContract.View, ArticleDetailPresenter> implements ArticleDetailContract.View, StatusBarUtil.StatusBarInterface {
+public class ArticleDetailActivity extends BaseMVPActivity<ArticleDetailContract.View, ArticleDetailPresenter> implements ArticleDetailContract.View {
 
     private static final String TAG = "ArticleDetailActivity";
 

@@ -6,9 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.wanandroid.R;
-import com.wanandroid.utils.StatusBarUtil;
 
-public class AboutMeActivity extends AppCompatActivity implements StatusBarUtil.StatusBarInterface {
+public class AboutMeActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
 

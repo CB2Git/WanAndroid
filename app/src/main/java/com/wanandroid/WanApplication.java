@@ -8,7 +8,6 @@ import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.DataBaseConfig;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
-import com.wanandroid.utils.StatusBarUtil;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -25,7 +24,6 @@ public class WanApplication extends Application {
         super.onCreate();
         initBuyly();
         initLiteOrm();
-        registerActivityLifecycleCallbacks(new StatusBarUtil());
     }
 
     private void initLiteOrm() {

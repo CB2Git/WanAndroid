@@ -15,13 +15,12 @@ import android.widget.TextView;
 import com.wanandroid.R;
 import com.wanandroid.business.base.BaseMVPActivity;
 import com.wanandroid.model.entity.WanAndroidUser;
-import com.wanandroid.utils.StatusBarUtil;
 import com.wanandroid.widget.CusProgressDialog;
 
 /**
  * 负责用户登录注册的Activity
  */
-public class LoginOrResisterActivity extends BaseMVPActivity<LoginOrRegisterContract.View, LoginOrRegisterPresenter> implements LoginOrRegisterContract.View, StatusBarUtil.StatusBarInterface {
+public class LoginOrResisterActivity extends BaseMVPActivity<LoginOrRegisterContract.View, LoginOrRegisterPresenter> implements LoginOrRegisterContract.View {
 
     private static final String AUTO_FINISH = "AUTO_FINISH";
 

@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/main_navigation_header_height"
     android:background="@color/colorAccent"
-    android:fitsSystemWindows="true"
     android:gravity="center"
     android:orientation="vertical">
 

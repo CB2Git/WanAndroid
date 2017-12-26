@@ -2,6 +2,8 @@ package com.wanandroid.business.main;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -17,6 +19,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +41,6 @@ import com.wanandroid.model.entity.Cid;
 import com.wanandroid.model.utils.WanAndroidCookieJar;
 import com.wanandroid.utils.ActivityUtils;
 import com.wanandroid.utils.ImeUtils;
-import com.wanandroid.utils.StatusBarUtil;
 
 /**
  * 应用主界面
@@ -45,7 +48,7 @@ import com.wanandroid.utils.StatusBarUtil;
  * 主要负责Fragment的切换以及事件的传递
  * </p>
  */
-public class MainActivity extends AppCompatActivity implements OnSearchKeyClickListener, OnSetToolbarTitleCallBack, StatusBarUtil.StatusBarInterface {
+public class MainActivity extends AppCompatActivity implements OnSearchKeyClickListener, OnSetToolbarTitleCallBack {
 
     private static final String TAG = "MainActivity";
 
@@ -75,6 +78,13 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView(savedInstanceState);
+        //5.0及以上使用透明状态栏，这样侧滑菜单滑出来好看点(ps:4.4无法兼容啊，只能放弃5.0以下的体验了)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+        }
     }
 
     @Override
