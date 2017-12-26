@@ -76,16 +76,32 @@
                 android:textSize="18sp"/>
         </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:id="@+id/login_or_register_button"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/login_button_selector"
-            android:elevation="1dp"
-            android:text="@string/login"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"/>
+            android:background="@drawable/login_button_selector">
+
+            <Button
+                android:id="@+id/login_or_register_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/login_button_selector"
+                android:elevation="1dp"
+                android:text="@string/login"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"/>
+
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/login_or_register_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:indicatorColor="@android:color/white"
+                app:indicatorName="BallPulseIndicator"/>
+
+        </FrameLayout>
 
         <TextView
             android:id="@+id/register_tv"

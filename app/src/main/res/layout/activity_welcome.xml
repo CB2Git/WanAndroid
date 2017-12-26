@@ -22,14 +22,22 @@
         android:layout_marginTop="50dp"
         android:src="@mipmap/ic_wanandroid_logo"/>
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="60dp"
         android:layout_gravity="bottom"
         android:background="#560f0f0f"
         android:gravity="center"
-        android:text="致技术人"
-        android:textColor="@color/light_gray"
-        android:textSize="@dimen/text_size_xxh"
-        android:visibility="gone"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/default_welcome_string"
+            android:textColor="@color/light_gray"
+            android:textSize="@dimen/text_size_h"/>
+
+    </LinearLayout>
+
 </FrameLayout>

@@ -1,7 +1,6 @@
 package com.wanandroid.business.classify;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.Gravity;
@@ -81,12 +80,7 @@ public class ClassifyDialog extends BaseMVPDialog<ClassifyContract.View, Classif
         Window window = getWindow();
         WindowManager.LayoutParams attributes = window.getAttributes();
         attributes.width = ScreenUtil.getScrWidth(getContext());
-        //由于适配了透明状态栏，所以需要上移一个状态栏高度
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            attributes.y = (int) (mAnchorView.getY() + mAnchorView.getHeight()) - ScreenUtil.getTitleBarHeight(getContext());
-        } else {
-            attributes.y = (int) (mAnchorView.getY() + mAnchorView.getHeight());
-        }
+        attributes.y = (int) (mAnchorView.getY() + mAnchorView.getHeight());
         window.setGravity(Gravity.TOP);
         window.setAttributes(attributes);
 

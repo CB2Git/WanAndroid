@@ -12,6 +12,7 @@ import com.wanandroid.business.main.MainActivity;
 
 /**
  * Apk启动的欢迎界面
+ * TODO:每日一句？？？
  */
 public class WelcomeActivity extends BaseMVPActivity<WelcomeContract.View, WelcomePresenter> implements WelcomeContract.View {
 

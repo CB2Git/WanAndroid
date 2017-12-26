@@ -1,6 +1,5 @@
 package com.wanandroid.business.login;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +14,7 @@ import android.widget.TextView;
 import com.wanandroid.R;
 import com.wanandroid.business.base.BaseMVPActivity;
 import com.wanandroid.model.entity.WanAndroidUser;
-import com.wanandroid.widget.CusProgressDialog;
+import com.wang.avi.AVLoadingIndicatorView;
 
 /**
  * 负责用户登录注册的Activity
@@ -42,7 +41,7 @@ public class LoginOrResisterActivity extends BaseMVPActivity<LoginOrRegisterCont
 
     private TextView mLoginOrRegisterTv;
 
-    private AlertDialog mProgressDialog = null;
+    private AVLoadingIndicatorView mLoadingIndicatorView;
 
     private boolean mIsInRegister = false;
 
@@ -94,6 +93,7 @@ public class LoginOrResisterActivity extends BaseMVPActivity<LoginOrRegisterCont
         mRePwd = findViewById(R.id.login_user_pwd_confirm);
         mLoginOrRegisterBtn = findViewById(R.id.login_or_register_button);
         mLoginOrRegisterTv = findViewById(R.id.register_tv);
+        mLoadingIndicatorView = findViewById(R.id.login_or_register_indicator);
 
         mToolbar = findViewById(R.id.login_toolbar);
         setSupportActionBar(mToolbar);
@@ -209,17 +209,18 @@ public class LoginOrResisterActivity extends BaseMVPActivity<LoginOrRegisterCont
 
     @Override
     public void showProgress() {
-        if (mProgressDialog == null) {
-            mProgressDialog = CusProgressDialog.show(this);
-        }
-        mProgressDialog.show();
+        mLoginOrRegisterBtn.setEnabled(false);
+        mLoginOrRegisterBtn.setVisibility(View.INVISIBLE);
+
+        mLoadingIndicatorView.show();
     }
 
     @Override
     public void hideProgress() {
-        if (mProgressDialog != null) {
-            mProgressDialog.dismiss();
-        }
+        mLoginOrRegisterBtn.setEnabled(true);
+        mLoginOrRegisterBtn.setVisibility(View.VISIBLE);
+
+        mLoadingIndicatorView.hide();
     }
 
     @Override

@@ -4,12 +4,19 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.wanandroid.BuildConfig;
 import com.wanandroid.R;
 
+/**
+ * 关于我
+ */
 public class AboutMeActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
+
+    private TextView mVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +31,8 @@ public class AboutMeActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        mVersion = findViewById(R.id.about_version);
+        mVersion.setText("Version:" + BuildConfig.VERSION_NAME);
     }
 
     @Override
