@@ -6,7 +6,7 @@
 
 ## 最新下载地址
 
-  [v1.0.0_beta](https://raw.githubusercontent.com/CB2Git/WanAndroid/master/release/WanAndroid_1.0.0.apk)
+  [v1.0.1](https://raw.githubusercontent.com/CB2Git/WanAndroid/master/release/WanAndroid_1.0.1.apk)
 
 ### 应用截图
 

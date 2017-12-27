@@ -69,6 +69,7 @@ public class LoginOrRegisterPresenter extends BasePresenterImpl<LoginOrRegisterC
                 .getApiService()
                 .register(userName, pwd, pwd)
                 .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .map(new Function<AuthData, WanAndroidUser>() {
                     @Override
                     public WanAndroidUser apply(@NonNull AuthData authData) throws Exception {
@@ -87,7 +88,6 @@ public class LoginOrRegisterPresenter extends BasePresenterImpl<LoginOrRegisterC
                         getView().hideProgress();
                     }
                 })
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<WanAndroidUser>() {
                     @Override
                     public void accept(WanAndroidUser authData) throws Exception {
