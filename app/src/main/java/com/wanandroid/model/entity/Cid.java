@@ -1,8 +1,9 @@
 package com.wanandroid.model.entity;
 
 /**
- * 分类数据
+ * 分类数据 替代{@link Tree}
  */
+@Deprecated
 public class Cid {
 
     private int cidId;

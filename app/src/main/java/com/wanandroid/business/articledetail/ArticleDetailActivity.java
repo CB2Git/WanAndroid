@@ -221,6 +221,7 @@ public class ArticleDetailActivity extends BaseMVPActivity<ArticleDetailContract
     @Override
     public void collectSuccess() {
         mCurrArticle.setCollect(true);
+        Snackbar.make(mWebToolbar, R.string.collect_successed, Snackbar.LENGTH_SHORT).show();
         invalidateOptionsMenu();
     }
 
@@ -234,6 +235,7 @@ public class ArticleDetailActivity extends BaseMVPActivity<ArticleDetailContract
     @Override
     public void unCollectSuccess() {
         mCurrArticle.setCollect(false);
+        Snackbar.make(mWebToolbar, R.string.collect_success, Snackbar.LENGTH_SHORT).show();
         invalidateOptionsMenu();
     }
 

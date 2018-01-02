@@ -3,6 +3,7 @@ package com.wanandroid.business.main;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,10 +38,11 @@ import com.wanandroid.business.collects.CollectFragment;
 import com.wanandroid.business.login.LoginOrResisterActivity;
 import com.wanandroid.business.search.SearchFragment;
 import com.wanandroid.model.db.UserManger;
-import com.wanandroid.model.entity.Cid;
+import com.wanandroid.model.entity.Tree;
 import com.wanandroid.model.utils.WanAndroidCookieJar;
 import com.wanandroid.utils.ActivityUtils;
 import com.wanandroid.utils.ImeUtils;
+import com.wanandroid.utils.PackageUtils;
 
 /**
  * 应用主界面
@@ -220,6 +222,10 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
                 if (itemId == R.id.action_quit_login) {
                     doQuitLogin();
                 }
+                //反馈
+                if (itemId == R.id.action_feedback) {
+                    doFeedBack();
+                }
                 //关于我
                 if (itemId == R.id.action_about_me) {
                     doAboutMe();
@@ -227,6 +233,31 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
                 return false;
             }
         };
+    }
+
+    //反馈
+    private void doFeedBack() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.prompt);
+        if (!PackageUtils.checkApkExist(this, "com.tencent.mobileqq")) {
+            builder.setMessage(R.string.qq_is_no_exist);
+            builder.setPositiveButton(R.string.confirm, null);
+        } else {
+            builder.setMessage(R.string.temp_chat_tip);
+            builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin=1479076807&version=1")));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(MainActivity.this, R.string.open_qq_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+        }
+        builder.show();
     }
 
     /**
@@ -315,7 +346,7 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
     private OnClassifyClickListener getOnCidClickListener() {
         return new OnClassifyClickListener() {
             @Override
-            public void onClassifyClickListener(final Cid cid) {
+            public void onClassifyClickListener(final Tree cid) {
                 if (mCidFragment == null) {
                     mCidFragment = new CidFragment();
                 }

@@ -6,49 +6,16 @@
 
 ## 最新下载地址
 
-  [v1.0.1](https://raw.githubusercontent.com/CB2Git/WanAndroid/master/release/WanAndroid_1.0.1.apk)
+ [v1.0.1](https://raw.githubusercontent.com/CB2Git/WanAndroid/master/release/WanAndroid_1.0.1.apk)
 
 ### 应用截图
 
 懒得截图了....
 
 
-#### 更新日志
-
-##### 2017/12/26 星期二 20:01:12 
-
-> 发布1.0正式版
-
-Done:
-
-1. 加入登录、注册、收藏等功能
-2. 优化UI显示，修改主题色等
-
-##### 2017/12/12 星期二 13:58:37 
-
-> 发布beta版本用于测试应用稳定性
-
-Done:
-
- 1. 首页、搜索、知识体系、文章查看等功能完成
-
-Todo:
-
-  1.完善bete版本
-
-  2.加入登录、注册、收藏等功能 
-
-##### 2017/12/1 星期五 17:47:27 
-
- > 完成对WanAndroid网站的数据抓取以及项目整体结构的搭建，包含接口如下
-
- 1. 登录、注册等用户相关接口
-
- 2. 收藏、取消收藏、搜索文章用户操作相关接口 
-
- 3. 首页数据获取、"大家都在搜"、文章分类获取、分类文章获取等浏览相关接口
  
 > 参考
 
- 1. [https://github.com/googlesamples/android-architecture](https://github.com/googlesamples/android-architecture "Google MVP Demo")
+ 1. [Google MVP Demo](https://github.com/googlesamples/android-architecture)
+ 2. [WanAndroid接口说明](http://www.wanandroid.com/blog/show/2)
 

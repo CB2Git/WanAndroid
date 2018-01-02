@@ -20,8 +20,9 @@ import io.reactivex.functions.Function;
 
 /**
  * 由于部分接口WanAndroid没有提供，所以采取解析网页的方式来提供兼容功能
- * TODO：当WanAndroid提供对应接口以后进行接口替换
+ * NOTE:目前兼容接口均有官方提供接口，说明文档http://www.wanandroid.com/blog/show/2
  */
+@Deprecated
 public class WanAndroidApiCompat {
 
     private static final String TAG = "WanAndroidApiCompat";
@@ -90,6 +91,7 @@ public class WanAndroidApiCompat {
      * 接口地址:www.wanandroid.com/
      * 请求方式:GET
      */
+    @Deprecated
     public static Observable<HotSearchData> getHotSearch() {
         return Observable.fromCallable(new Callable<HotSearchData>() {
             @Override
@@ -124,6 +126,7 @@ public class WanAndroidApiCompat {
     /**
      * 获取一级分类数据
      */
+    @Deprecated
     public static Observable<CidData> getOneCidData() {
         return Observable.fromCallable(new Callable<CidData>() {
             @Override
@@ -163,6 +166,7 @@ public class WanAndroidApiCompat {
     /**
      * 获取二级分类数据
      */
+    @Deprecated
     public static Observable<CidData> getTwoCidData(final int oneCidId) {
         return Observable.fromCallable(new Callable<CidData>() {
             @Override

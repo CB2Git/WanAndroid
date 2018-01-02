@@ -4,6 +4,8 @@ import com.wanandroid.model.ArticleData;
 import com.wanandroid.model.AuthData;
 import com.wanandroid.model.BaseResponseData;
 import com.wanandroid.model.CollectedArticleData;
+import com.wanandroid.model.HotKeyData;
+import com.wanandroid.model.TreeData;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
@@ -44,7 +46,11 @@ public interface WanAndroidApi {
     @POST("lg/collect/{id}/json")
     Observable<BaseResponseData> collectArticle(@Path("id") int id);
 
-    //获取分类数据
+    //获取"知识体系"
+    @GET("tree/json")
+    Observable<TreeData> getTreeData();
+
+    //获取"知识体系"数据
     @GET("article/list/{page}/json")
     Observable<ArticleData> getCidData(@Path("page") int page, @Query("cid") int cid);
 
@@ -52,4 +58,8 @@ public interface WanAndroidApi {
     @POST("article/query/{page}/json")
     @FormUrlEncoded
     Observable<ArticleData> searchArticle(@Path("page") int page, @Field("k") String key);
+
+    //热词接口
+    @GET("hotkey/json")
+    Observable<HotKeyData> getHotKey();
 }

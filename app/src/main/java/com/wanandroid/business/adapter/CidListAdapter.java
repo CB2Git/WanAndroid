@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.wanandroid.R;
-import com.wanandroid.model.entity.Cid;
+import com.wanandroid.model.entity.Tree;
 import com.wanandroid.utils.ViewHolder;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class CidListAdapter extends BaseAdapter {
 
     private Context mContext;
 
-    private List<Cid> mCids;
+    private List<Tree> mCids;
 
     private int mCurrSelect = -1;
 
@@ -30,12 +30,12 @@ public class CidListAdapter extends BaseAdapter {
         mCids = new ArrayList<>();
     }
 
-    public CidListAdapter(Context context, List<Cid> cids) {
+    public CidListAdapter(Context context, List<Tree> cids) {
         mContext = context;
         mCids = cids;
     }
 
-    public void setCids(List<Cid> newCids) {
+    public void setCids(List<Tree> newCids) {
         mCurrSelect = -1;
         mCids.clear();
         mCids.addAll(newCids);
@@ -68,9 +68,9 @@ public class CidListAdapter extends BaseAdapter {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             convertView = inflater.inflate(R.layout.dialg_classify_item, parent, false);
         }
-        Cid item = (Cid) getItem(position);
+        Tree item = (Tree) getItem(position);
         TextView tv = ViewHolder.get(convertView, R.id.classify_cid_text);
-        tv.setText(item.getCidTitle());
+        tv.setText(item.getName());
         tv.setEnabled(mCurrSelect != position);
         return convertView;
     }

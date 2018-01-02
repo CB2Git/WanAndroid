@@ -51,4 +51,8 @@
     <string name="default_welcome_string">致喧嚣世界中的技术人</string>
     <string name="about_the_project">关于本项目\n</string>
     <string name="about_me_tip">玩安卓的非官方客户端,数据均来源于HongYang建立的 www.wanandroid.com.\n\n本项目主要用于学习讨论,技术交流。如果本项目导致您的合法权益受到侵害,请及时与我联系.\n\n本项目完全开源于Github,源码地址为 www.github.com/CB2Git/WanAndroid 如果您在使用过程中发现不满意或者程序工作异常的情况，您可以提出Issue或者为本项目贡献出您的一份力量,我在看到后会第一时间处理.</string>
+    <string name="collect_success">已取消收藏</string>
+    <string name="collect_successed">已添加收藏</string>
+    <string name="login_success">登录成功</string>
+    <string name="register_success">注册成功</string>
 </resources>

@@ -5,6 +5,7 @@ import java.util.List;
 /**
  * "大家都在搜"的数据
  */
+@Deprecated
 public class HotSearchData extends BaseResponseData {
 
     private List<String> hotKeys;

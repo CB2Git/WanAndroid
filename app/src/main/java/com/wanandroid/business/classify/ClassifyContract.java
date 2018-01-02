@@ -1,6 +1,6 @@
 package com.wanandroid.business.classify;
 
-import com.wanandroid.model.entity.Cid;
+import com.wanandroid.model.entity.Tree;
 
 import java.util.List;
 
@@ -11,23 +11,14 @@ public class ClassifyContract {
 
     interface View {
 
-        void displayOneCid(List<Cid> oneCids);
-
-        void displayOneLoading();
-
-        void displayOneLoadError();
-
-        void displayTwoCid(List<Cid> twoCids);
-
-        void displayTwoLoading();
-
-        void displayTwoLoadError();
+        void displayTreeData(List<Tree> treeData);
     }
 
     interface Presenter {
 
-        void loadOneCid();
-
-        void loadTwoCid(int oneCidId);
+        /**
+         * 获取"知识体系"分类
+         */
+        void loadTree();
     }
 }

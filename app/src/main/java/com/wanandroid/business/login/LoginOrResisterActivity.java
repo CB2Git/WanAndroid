@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wanandroid.R;
 import com.wanandroid.business.base.BaseMVPActivity;
@@ -226,12 +227,14 @@ public class LoginOrResisterActivity extends BaseMVPActivity<LoginOrRegisterCont
     @Override
     public void loginSuccess(WanAndroidUser user) {
         getBindPresenter().saveUserData(user);
+        Toast.makeText(this, R.string.login_success, Toast.LENGTH_SHORT).show();
         doSomeThingAfterLoginOrRegister();
     }
 
     @Override
     public void registerSuccess(WanAndroidUser user) {
         getBindPresenter().saveUserData(user);
+        Toast.makeText(this, R.string.register_success, Toast.LENGTH_SHORT).show();
         doSomeThingAfterLoginOrRegister();
     }
 

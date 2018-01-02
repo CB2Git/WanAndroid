@@ -1,14 +1,15 @@
 package com.wanandroid.business.classify;
 
+import android.util.Log;
+
 import com.wanandroid.business.base.BasePresenterImpl;
-import com.wanandroid.model.CidData;
-import com.wanandroid.model.api.WanAndroidApiCompat;
-import com.wanandroid.model.entity.Cid;
+import com.wanandroid.model.TreeData;
+import com.wanandroid.model.api.WanAndroidRetrofitClient;
+import com.wanandroid.model.entity.Tree;
 
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -19,67 +20,32 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class ClassifyPresenter extends BasePresenterImpl<ClassifyContract.View> implements ClassifyContract.Presenter {
 
+    private static final String TAG = "ClassifyPresenter";
+    
     @Override
-    public void loadOneCid() {
-        Disposable subscribe = WanAndroidApiCompat.getOneCidData()
-                .map(new Function<CidData, List<Cid>>() {
+    public void loadTree() {
+        Disposable disposable = WanAndroidRetrofitClient.getApiService()
+                .getTreeData()
+                .map(new Function<TreeData, List<Tree>>() {
                     @Override
-                    public List<Cid> apply(@NonNull CidData cidData) throws Exception {
-                        return cidData.getCids();
+                    public List<Tree> apply(TreeData treeData) throws Exception {
+                        return treeData.getData();
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Consumer<Disposable>() {
+                .subscribe(new Consumer<List<Tree>>() {
                     @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        getView().displayOneLoading();
-                    }
-                })
-                .subscribe(new Consumer<List<Cid>>() {
-                    @Override
-                    public void accept(List<Cid> cids) throws Exception {
-                        getView().displayOneCid(cids);
+                    public void accept(List<Tree> trees) throws Exception {
+                        getView().displayTreeData(trees);
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        getView().displayOneLoadError();
-
+                        Log.e(TAG, "accept: " + throwable);
                     }
                 });
-        addDisposable(subscribe);
+        addDisposable(disposable);
     }
 
-    @Override
-    public void loadTwoCid(int oneCidId) {
-        Disposable subscribe = WanAndroidApiCompat.getTwoCidData(oneCidId)
-                .map(new Function<CidData, List<Cid>>() {
-                    @Override
-                    public List<Cid> apply(@NonNull CidData cidData) throws Exception {
-                        return cidData.getCids();
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Consumer<Disposable>() {
-                    @Override
-                    public void accept(Disposable disposable) throws Exception {
-                        getView().displayTwoLoading();
-                    }
-                })
-                .subscribe(new Consumer<List<Cid>>() {
-                    @Override
-                    public void accept(List<Cid> cids) throws Exception {
-                        getView().displayTwoCid(cids);
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        getView().displayTwoLoadError();
-
-                    }
-                });
-        addDisposable(subscribe);
-    }
 }

@@ -2,10 +2,10 @@ package com.wanandroid.business.search;
 
 import com.wanandroid.business.base.BasePresenterImpl;
 import com.wanandroid.model.ArticleData;
-import com.wanandroid.model.HotSearchData;
-import com.wanandroid.model.api.WanAndroidApiCompat;
+import com.wanandroid.model.HotKeyData;
 import com.wanandroid.model.api.WanAndroidRetrofitClient;
 import com.wanandroid.model.entity.Article;
+import com.wanandroid.model.entity.HotKey;
 
 import java.util.List;
 
@@ -28,26 +28,29 @@ public class SearchPresenter extends BasePresenterImpl<SearchContract.View> impl
 
     @Override
     public void getHotKeys() {
-        Disposable disposable = WanAndroidApiCompat.getHotSearch()
-                .map(new Function<HotSearchData, List<String>>() {
+        Disposable disposable = WanAndroidRetrofitClient
+                .getApiService()
+                .getHotKey()
+                .map(new Function<HotKeyData, List<HotKey>>() {
+
                     @Override
-                    public List<String> apply(@NonNull HotSearchData hotSearchData) throws Exception {
-                        return hotSearchData.getHotKeys();
+                    public List<HotKey> apply(HotKeyData hotKeyData) throws Exception {
+                        return hotKeyData.getData();
                     }
                 })
-                .filter(new Predicate<List<String>>() {
+                .filter(new Predicate<List<HotKey>>() {
                     @Override
-                    public boolean test(@NonNull List<String> strings) throws Exception {
-                        return strings != null && strings.size() > 0;
+                    public boolean test(List<HotKey> hotKeys) throws Exception {
+                        return hotKeys != null && hotKeys.size() > 0;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<String>>() {
+                .subscribe(new Consumer<List<HotKey>>() {
                     @Override
-                    public void accept(List<String> strings) throws Exception {
+                    public void accept(List<HotKey> hotKeys) throws Exception {
                         if (getView() != null) {
-                            getView().displayHotKeys(strings);
+                            getView().displayHotKeys(hotKeys);
                         }
                     }
                 });

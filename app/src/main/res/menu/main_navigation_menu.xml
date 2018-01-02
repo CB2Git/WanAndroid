@@ -26,6 +26,10 @@
             android:title="@string/setting"
             android:visible="false"/>
         <item
+            android:id="@+id/action_feedback"
+            android:icon="@mipmap/ic_feedback"
+            android:title="@string/feedback"/>
+        <item
             android:id="@+id/action_about_me"
             android:icon="@mipmap/ic_about"
             android:title="@string/about_me"/>

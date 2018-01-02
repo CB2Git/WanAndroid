@@ -1,6 +1,7 @@
 package com.wanandroid.business.search;
 
 import com.wanandroid.model.entity.Article;
+import com.wanandroid.model.entity.HotKey;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface SearchContract {
         /**
          * 显示"大家都在搜"
          */
-        void displayHotKeys(List<String> hotKeys);
+        void displayHotKeys(List<HotKey> hotKeys);
 
         /**
          * 显示搜索结果

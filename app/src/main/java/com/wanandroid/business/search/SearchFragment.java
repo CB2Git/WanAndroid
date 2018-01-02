@@ -18,6 +18,7 @@ import com.wanandroid.business.base.BaseArticlesFragment;
 import com.wanandroid.business.callback.OnArticleFragmentRefreshListener;
 import com.wanandroid.business.callback.OnSearchKeyClickListener;
 import com.wanandroid.model.entity.Article;
+import com.wanandroid.model.entity.HotKey;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -27,7 +28,7 @@ import java.util.List;
 
 /**
  * 显示搜索结果的Fragment
- *
+ * <p>
  * TODO：搜索历史以后来一发
  * <p>
  * TODO:给搜索加一个清空(返回键~~)可好
@@ -40,7 +41,7 @@ public class SearchFragment extends BaseArticlesFragment<SearchContract.View, Se
     private TagFlowLayout mFlowLayout;
 
     //热搜
-    private List<String> mHotKeys;
+    private List<HotKey> mHotKeys;
 
     //状态一:显示"大家都在搜"的布局
     private LinearLayout mHotKeysLayout;
@@ -104,15 +105,15 @@ public class SearchFragment extends BaseArticlesFragment<SearchContract.View, Se
 
 
     @Override
-    public void displayHotKeys(List<String> hotKeys) {
+    public void displayHotKeys(List<HotKey> hotKeys) {
         Log.i(TAG, "displayHotKeys: " + hotKeys.size());
         final LayoutInflater inflater = LayoutInflater.from(getContext());
         mHotKeys = hotKeys;
-        mFlowLayout.setAdapter(new TagAdapter<String>(hotKeys) {
+        mFlowLayout.setAdapter(new TagAdapter<HotKey>(hotKeys) {
             @Override
-            public View getView(FlowLayout parent, int position, String s) {
+            public View getView(FlowLayout parent, int position, HotKey s) {
                 TextView textView = (TextView) inflater.inflate(R.layout.hot_key_item, parent, false);
-                textView.setText(s);
+                textView.setText(s.getName());
                 return textView;
             }
 
@@ -199,7 +200,7 @@ public class SearchFragment extends BaseArticlesFragment<SearchContract.View, Se
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
                 if (mOnSearchKeyClickListener != null) {
-                    mOnSearchKeyClickListener.OnSearchKeyClick(mHotKeys.get(position));
+                    mOnSearchKeyClickListener.OnSearchKeyClick(mHotKeys.get(position).getName());
                 }
                 return false;
             }

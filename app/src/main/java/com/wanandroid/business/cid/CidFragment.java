@@ -15,7 +15,7 @@ import com.wanandroid.business.callback.OnArticleFragmentRefreshListener;
 import com.wanandroid.business.callback.OnClassifyClickListener;
 import com.wanandroid.business.callback.OnSetToolbarTitleCallBack;
 import com.wanandroid.model.entity.Article;
-import com.wanandroid.model.entity.Cid;
+import com.wanandroid.model.entity.Tree;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class CidFragment extends BaseArticlesFragment<CidContract.View, CidPrese
 
     private static final String TAG = "CidFragment";
 
-    private Cid mCurrCid;
+    private Tree mCurrCid;
 
     private OnSetToolbarTitleCallBack mOnSetToolbarTitleCallBack;
 
@@ -78,9 +78,9 @@ public class CidFragment extends BaseArticlesFragment<CidContract.View, CidPrese
     }
 
     @Override
-    public void onClassifyClickListener(Cid cid) {
+    public void onClassifyClickListener(Tree cid) {
         mCurrCid = cid;
-        getBindPresenter().refreshCidDetail(mCurrCid.getCidId());
+        getBindPresenter().refreshCidDetail(mCurrCid.getId());
     }
 
     @Override
@@ -122,7 +122,7 @@ public class CidFragment extends BaseArticlesFragment<CidContract.View, CidPrese
             @Override
             public void onPullTopRefresh() {
                 getBindPresenter().cancelRefresh();
-                getBindPresenter().refreshCidDetail(mCurrCid.getCidId());
+                getBindPresenter().refreshCidDetail(mCurrCid.getId());
             }
 
             @Override

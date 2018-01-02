@@ -14,7 +14,7 @@ import com.wanandroid.R;
 import com.wanandroid.business.adapter.CidListAdapter;
 import com.wanandroid.business.base.BaseMVPDialog;
 import com.wanandroid.business.callback.OnClassifyClickListener;
-import com.wanandroid.model.entity.Cid;
+import com.wanandroid.model.entity.Tree;
 import com.wanandroid.utils.ScreenUtil;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -23,6 +23,11 @@ import java.util.List;
 /**
  * 显示"知识体系"的分类对话框
  */
+
+/*
+mOneCidIndicator.setVisibility(View.INVISIBLE);
+        mOneCidIndicator.hide();
+        mCidOne.setVisibility(View.VISIBLE);*/
 public class ClassifyDialog extends BaseMVPDialog<ClassifyContract.View, ClassifyPresenter> implements ClassifyContract.View {
 
     private View mAnchorView;
@@ -38,6 +43,9 @@ public class ClassifyDialog extends BaseMVPDialog<ClassifyContract.View, Classif
 
     //适配器
     private CidListAdapter mCidTwoAdapter;
+
+    //"知识体系"数据
+    private List<Tree> mTreeData;
 
     //是否第一次加载，如果是第一次，则需要将第二级也加载一次
     private boolean isFirstLoadCid = true;
@@ -100,15 +108,23 @@ public class ClassifyDialog extends BaseMVPDialog<ClassifyContract.View, Classif
         mCidTwo.setOnItemClickListener(getOnItemClickListener());
     }
 
+    private void displayRootTree(List<Tree> root) {
+        mCidOneAdapter.setCids(root);
+    }
+
+    private void displayChildrenTree(List<Tree> childRoot) {
+        mCidTwoAdapter.setCids(childRoot);
+    }
+
     @NonNull
     private AdapterView.OnItemClickListener getOnItemClickListener() {
         return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Cid cidItem = (Cid) parent.getAdapter().getItem(position);
+                Tree cidItem = (Tree) parent.getAdapter().getItem(position);
                 if (parent.getId() == R.id.classify_one_cid) {
                     mCidOneAdapter.setCurrSelect(position);
-                    getBindPresenter().loadTwoCid(cidItem.getCidId());
+                    displayChildrenTree(cidItem.getChildren());
                 }
                 if (parent.getId() == R.id.classify_two_cid) {
                     mCidTwoAdapter.setCurrSelect(position);
@@ -128,54 +144,20 @@ public class ClassifyDialog extends BaseMVPDialog<ClassifyContract.View, Classif
     @Override
     protected void onStart() {
         super.onStart();
-        if (isFirstLoadCid) {
-            getBindPresenter().loadOneCid();
+        //如果没有加载过，则加载"知识体系"
+        if (mTreeData == null) {
+            getBindPresenter().loadTree();
         }
     }
 
     @Override
-    public void displayOneCid(List<Cid> oneCids) {
-        mCidOneAdapter.setCids(oneCids);
-        if (isFirstLoadCid) {
-            mCidOneAdapter.setCurrSelect(0);
-            Cid oneID = (Cid) mCidOneAdapter.getItem(0);
-            getBindPresenter().loadTwoCid(oneID.getCidId());
-            isFirstLoadCid = false;
-        }
-        mOneCidIndicator.setVisibility(View.INVISIBLE);
+    public void displayTreeData(List<Tree> treeData) {
         mOneCidIndicator.hide();
-        mCidOne.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void displayOneLoading() {
-        mOneCidIndicator.setVisibility(View.VISIBLE);
-        mOneCidIndicator.show();
-        mCidOne.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void displayOneLoadError() {
-
-    }
-
-    @Override
-    public void displayTwoCid(List<Cid> twoCids) {
-        mCidTwoAdapter.setCids(twoCids);
-        mTwoCidIndicator.setVisibility(View.INVISIBLE);
         mTwoCidIndicator.hide();
-        mCidTwo.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void displayTwoLoading() {
-        mTwoCidIndicator.setVisibility(View.VISIBLE);
-        mTwoCidIndicator.show();
-        mCidTwo.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void displayTwoLoadError() {
-
+        mTreeData = treeData;
+        mCidOneAdapter.setCurrSelect(0);
+        mCidTwoAdapter.setCurrSelect(0);
+        displayRootTree(mTreeData);
+        displayChildrenTree(mTreeData.get(0).getChildren());
     }
 }
