@@ -13,12 +13,15 @@ public class ImeUtils {
     public static void showIme(@NonNull View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         // 接受软键盘输入的编辑文本或其它视图
+        assert imm != null;
         imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
     }
 
     public static void hideIme(@NonNull View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context
                 .INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

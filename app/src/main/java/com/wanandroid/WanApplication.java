@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.litesuits.orm.LiteOrm;
 import com.litesuits.orm.db.DataBaseConfig;
+import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -22,6 +23,13 @@ public class WanApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        //link:https://github.com/square/leakcanary
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
         initBuyly();
         initLiteOrm();
     }
