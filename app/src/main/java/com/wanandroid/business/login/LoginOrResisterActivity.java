@@ -95,6 +95,7 @@ public class LoginOrResisterActivity extends BaseMVPActivity<LoginOrRegisterCont
         mLoginOrRegisterBtn = findViewById(R.id.login_or_register_button);
         mLoginOrRegisterTv = findViewById(R.id.register_tv);
         mLoadingIndicatorView = findViewById(R.id.login_or_register_indicator);
+        mLoadingIndicatorView.setVisibility(View.GONE);
 
         mToolbar = findViewById(R.id.login_toolbar);
         setSupportActionBar(mToolbar);

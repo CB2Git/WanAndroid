@@ -28,6 +28,7 @@ public class CollectedArticle extends Article {
      * userId : 883
      */
 
+    //originId才是文章的id
     private int originId;
     private int userId;
 

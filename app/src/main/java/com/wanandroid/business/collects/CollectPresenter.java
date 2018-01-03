@@ -40,6 +40,13 @@ public class CollectPresenter extends BasePresenterImpl<CollectContract.View> im
                 .map(new Function<List<CollectedArticle>, List<Article>>() {
                     @Override
                     public List<Article> apply(List<CollectedArticle> collectedArticles) throws Exception {
+                        //originId才是文章的id，所以这里直接设置下
+                        for (CollectedArticle c : collectedArticles) {
+                            c.setId(c.getOriginId());
+                            //搜藏数据肯定是被收藏了的啊
+                            c.setCollect(true);
+                        }
+
                         List<Article> articles = new ArrayList<>();
                         articles.addAll(collectedArticles);
                         return articles;
