@@ -43,6 +43,7 @@ import com.wanandroid.model.utils.WanAndroidCookieJar;
 import com.wanandroid.utils.ActivityUtils;
 import com.wanandroid.utils.ImeUtils;
 import com.wanandroid.utils.PackageUtils;
+import com.wanandroid.widget.AutoClearEditText;
 
 /**
  * 应用主界面
@@ -104,11 +105,13 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
     }
 
     private void initView(Bundle savedInstanceState) {
+        //初始化全部控件
         mHolder = new MainActivityHolder(this);
         //初始化登录用户信息
         mHolder.initUserInfo(UserManger.getUserInfo());
         //为EditText设置搜索监听
         mHolder.getSearchEdit().setOnEditorActionListener(getEditorAction());
+        mHolder.getSearchEdit().setOnClearTextListener(getOnClearEditTextListenrt());
         if (mArticleFragment == null) {
             mArticleFragment = new ArticlesFragment();
         }
@@ -231,6 +234,21 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
                     doAboutMe();
                 }
                 return false;
+            }
+        };
+    }
+
+    /**
+     * 当搜索框被清空的回调
+     */
+    private AutoClearEditText.OnClearTextListener getOnClearEditTextListenrt() {
+        return new AutoClearEditText.OnClearTextListener() {
+            @Override
+            public void onClearText() {
+                if (mSearchFragment != null && mInSearchMode) {
+                    //显示"热搜"
+                    mSearchFragment.toggleViewStatue(0);
+                }
             }
         };
     }
@@ -362,20 +380,33 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
         };
     }
 
+    private long last_click_back_time = 0;
+
     @Override
     public void onBackPressed() {
         boolean consumed = false;
-        if (mArticleFragment != null) {
+        if (mArticleFragment != null && mInSearchMode) {
             consumed = mArticleFragment.onBackPressed();
+        }
+        if (mSearchFragment != null && mInSearchMode) {
+            consumed = mSearchFragment.onBackPressed();
         }
         if (!consumed) {
             //自己处理返回事件
+            //如果在搜索模式，退出搜索
             if (mInSearchMode) {
                 switchSearchMode(false);
                 return;
             }
+            //如果侧滑菜单开启，关闭
             if (mHolder.isDrawerOpen()) {
                 mHolder.closeDrawer();
+                return;
+            }
+            //双击应用才退出应用
+            if (System.currentTimeMillis() - last_click_back_time > 2000) {
+                Toast.makeText(this, R.string.double_click_back_exit, Toast.LENGTH_SHORT).show();
+                last_click_back_time = System.currentTimeMillis();
                 return;
             }
             super.onBackPressed();
@@ -406,7 +437,9 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    if (search(v.getText().toString())) return true;
+                    if (search(v.getText().toString())) {
+                        return true;
+                    }
                 }
                 return false;
             }

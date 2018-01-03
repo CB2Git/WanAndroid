@@ -8,6 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * WanAndroid Api RetrofitClient管理类
+ * @author Jay
  */
 public class WanAndroidRetrofitClient {
 

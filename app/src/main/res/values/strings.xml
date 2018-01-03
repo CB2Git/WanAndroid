@@ -59,4 +59,5 @@
     <string name="qq_is_no_exist">您的设备未安装QQ,无法反馈</string>
     <string name="open_qq_error">打开临时会话失败</string>
     <string name="temp_chat_tip">即将为您打开QQ进行临时会话,如果无法发送消息可以选择添加我为好友</string>
+    <string name="double_click_back_exit">再按一下返回键退出应用</string>
 </resources>

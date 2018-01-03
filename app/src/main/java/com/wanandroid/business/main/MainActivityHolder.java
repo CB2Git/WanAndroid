@@ -6,12 +6,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wanandroid.R;
 import com.wanandroid.model.entity.WanAndroidUser;
+import com.wanandroid.widget.AutoClearEditText;
 
 /**
  * 由于MainActivity包裹的View过多，所有使用一个Holder进行统一管理
@@ -24,7 +24,7 @@ public class MainActivityHolder {
 
     private Toolbar mToolbar;
 
-    private EditText mSearchEdit;
+    private AutoClearEditText mSearchEdit;
 
     //侧滑控件
     private DrawerLayout mDrawerLayout;
@@ -93,7 +93,7 @@ public class MainActivityHolder {
         return mToolbar;
     }
 
-    public EditText getSearchEdit() {
+    public AutoClearEditText getSearchEdit() {
         return mSearchEdit;
     }
 

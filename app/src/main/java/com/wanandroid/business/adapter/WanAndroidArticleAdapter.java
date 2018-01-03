@@ -140,8 +140,9 @@ public class WanAndroidArticleAdapter extends RefreshRecycleAdapter<WanAndroidAr
         @Override
         public void onClick(View v) {
 
-            if (mItemClickListener == null)
+            if (mItemClickListener == null) {
                 return;
+            }
 
             //打开文章
             if (v.getId() == R.id.ll_article_item) {

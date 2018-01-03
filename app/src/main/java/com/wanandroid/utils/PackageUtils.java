@@ -10,8 +10,9 @@ import android.content.pm.PackageManager;
 public class PackageUtils {
 
     public static boolean checkApkExist(Context context, String packageName) {
-        if (packageName == null || "".equals(packageName))
+        if (packageName == null || "".equals(packageName)) {
             return false;
+        }
         try {
             ApplicationInfo info = context.getPackageManager().getApplicationInfo(packageName,
                     PackageManager.GET_UNINSTALLED_PACKAGES);

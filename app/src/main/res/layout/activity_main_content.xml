@@ -19,12 +19,13 @@
             app:title="@string/app_name"
             app:titleTextColor="@android:color/white">
 
-            <EditText
+            <com.wanandroid.widget.AutoClearEditText
                 android:id="@+id/main_edit_search"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginRight="16dp"
                 android:background="@drawable/edit_text_bg"
+                android:drawableRight="@drawable/clear_selector"
                 android:hint="@string/search_hint"
                 android:imeOptions="actionSearch"
                 android:inputType="text"

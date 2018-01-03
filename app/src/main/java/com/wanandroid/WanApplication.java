@@ -14,6 +14,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * @author Jay
+ */
 public class WanApplication extends Application {
 
     private static final String DB_NAME = "wanandroid.db";

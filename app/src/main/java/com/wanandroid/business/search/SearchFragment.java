@@ -30,8 +30,6 @@ import java.util.List;
  * 显示搜索结果的Fragment
  * <p>
  * TODO：搜索历史以后来一发
- * <p>
- * TODO:给搜索加一个清空(返回键~~)可好
  */
 public class SearchFragment extends BaseArticlesFragment<SearchContract.View, SearchPresenter> implements SearchContract.View {
 
@@ -54,6 +52,9 @@ public class SearchFragment extends BaseArticlesFragment<SearchContract.View, Se
 
     //状态四:搜索结果为空或者搜索出现了错误
     private TextView mSearchError;
+
+    //当前的显示视图的状态
+    private int mCurrSearchViewState;
 
     //当前正在搜索的关键词
     private String current_key;
@@ -218,7 +219,7 @@ public class SearchFragment extends BaseArticlesFragment<SearchContract.View, Se
      *               2 - "搜索结果"<br>
      *               3 - "搜索失败"
      */
-    private void toggleViewStatue(int statue) {
+    public void toggleViewStatue(int statue) {
         mHotKeysLayout.setVisibility(statue == 0 ? View.VISIBLE : View.INVISIBLE);
         mAVIIndicator.setVisibility(statue == 1 ? View.VISIBLE : View.INVISIBLE);
         if (statue == 1) {
@@ -228,6 +229,7 @@ public class SearchFragment extends BaseArticlesFragment<SearchContract.View, Se
         }
         mSearchResult.setVisibility(statue == 2 ? View.VISIBLE : View.INVISIBLE);
         mSearchError.setVisibility(statue == 3 ? View.VISIBLE : View.INVISIBLE);
+        mCurrSearchViewState = statue;
     }
 
     public OnArticleFragmentRefreshListener getOnArticleFragmentRefreshListener() {
@@ -242,5 +244,14 @@ public class SearchFragment extends BaseArticlesFragment<SearchContract.View, Se
                 getBindPresenter().doSearchNextPage();
             }
         };
+    }
+
+    public boolean onBackPressed() {
+        //如果按下返回键不是在"热搜"视图,那么切换到"热搜"视图
+        if (mCurrSearchViewState != 0) {
+            toggleViewStatue(0);
+            return true;
+        }
+        return false;
     }
 }
