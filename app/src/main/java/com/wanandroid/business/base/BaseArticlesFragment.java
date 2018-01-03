@@ -112,6 +112,13 @@ public abstract class BaseArticlesFragment<V, P extends BasePresenterImpl<V>> ex
             @Override
             public void onClick(View v) {
                 if (mRecyclerView != null) {
+                    mRecyclerView.stopScroll();
+                    LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+                    int position = manager.findLastCompletelyVisibleItemPosition();
+                    //优化滚动到顶部的UI效果
+                    if (position > 10) {
+                        mRecyclerView.scrollToPosition(10);
+                    }
                     mRecyclerView.smoothScrollToPosition(0);
                     //因为smoothScrollToPosition不会触发behavior，所以这里手动隐藏
                     ViewCompat.animate(mBackTopButton)
