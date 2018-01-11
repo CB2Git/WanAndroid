@@ -11,6 +11,7 @@ import io.reactivex.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -48,6 +49,7 @@ public interface WanAndroidApi {
 
     //获取"知识体系"
     @GET("tree/json")
+    @Headers("Cache-Control: public, max-age=3600")
     Observable<TreeData> getTreeData();
 
     //获取"知识体系"数据
@@ -61,5 +63,6 @@ public interface WanAndroidApi {
 
     //热词接口
     @GET("hotkey/json")
+    @Headers("Cache-Control: public, max-age=36000")
     Observable<HotKeyData> getHotKey();
 }

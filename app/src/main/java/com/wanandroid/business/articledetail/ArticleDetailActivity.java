@@ -25,8 +25,8 @@ import com.wanandroid.R;
 import com.wanandroid.business.base.BaseMVPActivity;
 import com.wanandroid.business.login.LoginOrResisterActivity;
 import com.wanandroid.model.entity.Article;
-import com.wanandroid.model.entity.WanAndroidUser;
 import com.wanandroid.utils.ActivityUtils;
+import com.wanandroid.utils.SharedPreferencesUtil;
 import com.wanandroid.utils.SharesUtils;
 import com.wanandroid.widget.WebViewFragment;
 
@@ -177,8 +177,9 @@ public class ArticleDetailActivity extends BaseMVPActivity<ArticleDetailContract
      * 执行收藏/取消收藏动作
      */
     private void doCollectAction() {
-        WanAndroidUser userInfo = getBindPresenter().getUserInfo();
-        if (userInfo == null) {
+        //WanAndroidUser userInfo = getBindPresenter().getUserInfo();
+        boolean isLogin = (boolean) SharedPreferencesUtil.get(this, "isLogin", false);
+        if (!isLogin){
             Log.i(TAG, "doCollectAction: UserInfo is null,try autoLogin or register");
             Intent intent = LoginOrResisterActivity.newInstance(this, true);
             startActivity(intent);

@@ -1,5 +1,6 @@
 package com.wanandroid.business.login;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -8,6 +9,7 @@ import com.wanandroid.model.AuthData;
 import com.wanandroid.model.api.WanAndroidRetrofitClient;
 import com.wanandroid.model.db.UserManger;
 import com.wanandroid.model.entity.WanAndroidUser;
+import com.wanandroid.utils.SharedPreferencesUtil;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
@@ -110,6 +112,11 @@ public class LoginOrRegisterPresenter extends BasePresenterImpl<LoginOrRegisterC
     @Override
     public void clearUserData() {
         UserManger.clearUserInfo();
+    }
+
+    @Override
+    public void modifyLocalLoginStatue(Context context, boolean isLogin) {
+        SharedPreferencesUtil.put(context, "isLogin", isLogin);
     }
 
     @Override

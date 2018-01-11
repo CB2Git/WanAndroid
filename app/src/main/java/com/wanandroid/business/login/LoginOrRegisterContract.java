@@ -1,5 +1,7 @@
 package com.wanandroid.business.login;
 
+import android.content.Context;
+
 import com.wanandroid.model.entity.WanAndroidUser;
 
 /**
@@ -32,6 +34,11 @@ public class LoginOrRegisterContract {
         void saveUserData(WanAndroidUser user);
 
         void clearUserData();
+
+        /**
+         * 更新本地用户登录状态
+         */
+        void modifyLocalLoginStatue(Context context, boolean isLogin);
 
         WanAndroidUser loadUserData();
     }

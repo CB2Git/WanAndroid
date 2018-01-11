@@ -229,6 +229,7 @@ public class LoginOrResisterActivity extends BaseMVPActivity<LoginOrRegisterCont
     public void loginSuccess(WanAndroidUser user) {
         getBindPresenter().saveUserData(user);
         Toast.makeText(this, R.string.login_success, Toast.LENGTH_SHORT).show();
+        getBindPresenter().modifyLocalLoginStatue(this, true);
         doSomeThingAfterLoginOrRegister();
     }
 
@@ -236,6 +237,7 @@ public class LoginOrResisterActivity extends BaseMVPActivity<LoginOrRegisterCont
     public void registerSuccess(WanAndroidUser user) {
         getBindPresenter().saveUserData(user);
         Toast.makeText(this, R.string.register_success, Toast.LENGTH_SHORT).show();
+        getBindPresenter().modifyLocalLoginStatue(this, true);
         doSomeThingAfterLoginOrRegister();
     }
 
@@ -250,12 +252,14 @@ public class LoginOrResisterActivity extends BaseMVPActivity<LoginOrRegisterCont
     @Override
     public void loginFail() {
         getBindPresenter().clearUserData();
+        getBindPresenter().modifyLocalLoginStatue(this, false);
         Snackbar.make(mLoginOrRegisterTv, R.string.login_fail, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void registerFail() {
         getBindPresenter().clearUserData();
+        getBindPresenter().modifyLocalLoginStatue(this, false);
         Snackbar.make(mLoginOrRegisterTv, R.string.register_fail, Snackbar.LENGTH_SHORT).show();
     }
 }

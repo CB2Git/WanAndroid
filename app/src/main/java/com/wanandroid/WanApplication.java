@@ -23,6 +23,8 @@ public class WanApplication extends Application {
 
     public static LiteOrm liteOrm;
 
+    private static Context mContext;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -35,6 +37,7 @@ public class WanApplication extends Application {
         LeakCanary.install(this);
         initBuyly();
         initLiteOrm();
+        mContext = this;
     }
 
     private void initLiteOrm() {
@@ -62,6 +65,9 @@ public class WanApplication extends Application {
         Bugly.init(context, BuildConfig.Buyly_App_id, BuildConfig.LOG_DEBUG, strategy);
     }
 
+    public static final Context getAppContext() {
+        return mContext;
+    }
 
     /**
      * 获取进程号对应的进程名

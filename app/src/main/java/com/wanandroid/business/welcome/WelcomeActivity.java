@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.wanandroid.R;
 import com.wanandroid.business.base.BaseMVPActivity;
@@ -24,6 +25,7 @@ public class WelcomeActivity extends BaseMVPActivity<WelcomeContract.View, Welco
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        getBindPresenter().modifyLocalLoginStatue(this, false);
         getBindPresenter().autoLogin();
         mHandler.postDelayed(new Runnable() {
             @Override
@@ -45,5 +47,16 @@ public class WelcomeActivity extends BaseMVPActivity<WelcomeContract.View, Welco
     @Override
     public WelcomeContract.View bindView() {
         return this;
+    }
+
+    @Override
+    public void autoLoginFail() {
+        Toast.makeText(this, R.string.auto_login_error, Toast.LENGTH_SHORT).show();
+        getBindPresenter().modifyLocalLoginStatue(this, false);
+    }
+
+    @Override
+    public void autoLoginSuccess() {
+        getBindPresenter().modifyLocalLoginStatue(this, true);
     }
 }

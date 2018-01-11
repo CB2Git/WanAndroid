@@ -1,9 +1,11 @@
-package com.wanandroid.model.utils;
+package com.wanandroid.model.api.utils;
 
-import com.wanandroid.BuildConfig;
+import com.wanandroid.WanApplication;
 
+import java.io.File;
+
+import okhttp3.Cache;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
  * 由于一个应用只应该存在一个OkHttp客户端，所以通过这个管理
@@ -15,13 +17,15 @@ public class OkHttpClientManger {
     public static OkHttpClient getOkHttpClient() {
         if (okHttpClient == null) {
             synchronized (OkHttpClientManger.class) {
-                HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-                loggingInterceptor.setLevel(BuildConfig.LOG_DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
-
+                // 指定缓存路径,缓存大小50Mb
+                Cache cache = new Cache(new File(WanApplication.getAppContext().getExternalCacheDir(), "HttpCache"), 1024 * 1024 * 50);
                 if (okHttpClient == null) {
                     okHttpClient = new OkHttpClient.Builder()
+                            .cache(cache)
                             .cookieJar(new WanAndroidCookieJar())
-                            .addNetworkInterceptor(loggingInterceptor)
+                            .addNetworkInterceptor(OkHttpConfig.sCacheControlInterceptor)
+                            .addInterceptor(OkHttpConfig.sCacheControlInterceptor)
+                            .addNetworkInterceptor(OkHttpConfig.sLoggingInterceptor)
                             .retryOnConnectionFailure(true)
                             .build();
                 }

@@ -37,12 +37,13 @@ import com.wanandroid.business.classify.ClassifyDialog;
 import com.wanandroid.business.collects.CollectFragment;
 import com.wanandroid.business.login.LoginOrResisterActivity;
 import com.wanandroid.business.search.SearchFragment;
+import com.wanandroid.model.api.utils.WanAndroidCookieJar;
 import com.wanandroid.model.db.UserManger;
 import com.wanandroid.model.entity.Tree;
-import com.wanandroid.model.utils.WanAndroidCookieJar;
 import com.wanandroid.utils.ActivityUtils;
 import com.wanandroid.utils.ImeUtils;
 import com.wanandroid.utils.PackageUtils;
+import com.wanandroid.utils.SharedPreferencesUtil;
 import com.wanandroid.widget.AutoClearEditText;
 
 /**
@@ -292,7 +293,8 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
     private boolean doShowCollects() {
 
         //如果没有登录，则点击跳转到登录界面
-        if (UserManger.getUserInfo() == null) {
+        boolean isLogin = (boolean) SharedPreferencesUtil.get(this, "isLogin", false);
+        if (!isLogin) {
             Intent intent = LoginOrResisterActivity.newInstance(this, true);
             startActivity(intent);
             return false;
@@ -403,6 +405,10 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
                 mHolder.closeDrawer();
                 return;
             }
+            if (mCidFragment != null && mCidFragment.isAdded()) {
+                doShowHomePage();
+                return;
+            }
             //双击应用才退出应用
             if (System.currentTimeMillis() - last_click_back_time > 2000) {
                 Toast.makeText(this, R.string.double_click_back_exit, Toast.LENGTH_SHORT).show();
@@ -417,7 +423,8 @@ public class MainActivity extends AppCompatActivity implements OnSearchKeyClickL
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (UserManger.getUserInfo() == null) {
+                boolean isLogin = (boolean) SharedPreferencesUtil.get(MainActivity.this, "isLogin", false);
+                if (!isLogin) {
                     Intent intent = LoginOrResisterActivity.newInstance(MainActivity.this, true);
                     startActivity(intent);
                 } else {

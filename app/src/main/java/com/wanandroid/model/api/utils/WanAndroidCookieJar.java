@@ -1,4 +1,4 @@
-package com.wanandroid.model.utils;
+package com.wanandroid.model.api.utils;
 
 import android.util.Log;
 

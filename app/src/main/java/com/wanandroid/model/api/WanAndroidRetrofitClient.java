@@ -1,6 +1,6 @@
 package com.wanandroid.model.api;
 
-import com.wanandroid.model.utils.OkHttpClientManger;
+import com.wanandroid.model.api.utils.OkHttpClientManger;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
