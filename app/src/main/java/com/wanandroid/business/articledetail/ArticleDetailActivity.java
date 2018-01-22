@@ -124,7 +124,6 @@ public class ArticleDetailActivity extends BaseMVPActivity<ArticleDetailContract
 
         mWebViewFragment = new WebViewFragment();
         ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), mWebViewFragment, R.id.base_web_container);
-
     }
 
     @Override

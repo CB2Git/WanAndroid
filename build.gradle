@@ -24,6 +24,14 @@ allprojects {
             name 'Google'
         }
     }
+
+    ext {
+        minSdkVersion = 14
+        targetSdkVersion = 26
+        compileSdkVersion = 26
+        buildToolsVersion = "26.0.2"
+        supportVersion = "26.0.1"
+    }
 }
 
 task clean(type: Delete) {
