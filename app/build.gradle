@@ -1,18 +1,23 @@
 apply plugin: 'com.android.application'
 
+//加载签名信息
+Properties properties = new Properties()
+File keyPropertiesFile = project.file('key.properties')
+boolean hasKeyFile = false
+if (keyPropertiesFile.exists()) {
+    hasKeyFile = true
+    properties.load(keyPropertiesFile.newDataInputStream())
+} else {
+    hasKeyFile = false
+}
+
 android {
     signingConfigs {
-        debug {
-            keyAlias '123456'
-            keyPassword '123456'
-            storeFile file('F:/key.jks')
-            storePassword '123456'
-        }
         release {
-            keyAlias 'CB2Git'
-            keyPassword 'chenbing'
-            storeFile file('F:/releasekey.jks')
-            storePassword 'chenbing'
+            keyAlias properties.getProperty("keyAlias")
+            keyPassword properties.getProperty("keyPassword")
+            storeFile file(properties.getProperty("storeFile"))
+            storePassword properties.getProperty("storePassword")
         }
     }
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -37,7 +42,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
-            signingConfig signingConfigs.debug
+            if (hasKeyFile) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 
